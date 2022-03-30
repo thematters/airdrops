@@ -16,11 +16,11 @@ trace: clean
 
 # Deployments
 deploy: clean
-	@forge create TheSpaceClaimAirdrop --rpc-url ${ETH_RPC_URL} --private-key ${DEPLOYER_PRIVATE_KEY} --constructor-args ${MERKLE_ROOT}
+	@forge create TheSpaceAirdrop --rpc-url ${ETH_RPC_URL} --private-key ${DEPLOYER_PRIVATE_KEY} --constructor-args ${TOKEN_ADDRESS} --constructor-args ${MERKLE_ROOT} --constructor-args ${EXPIRED_AT}
 
 # Verifications
 check-verification:
 	@forge verify-check --chain-id ${CHAIN_ID} ${GUID} ${ETHERSCAN_API_KEY}
 
 verify:
-	@forge verify-contract --chain-id ${CHAIN_ID} --constructor-args ${ABI_ENCODE_CONSTRUCTOR_ARGS} --num-of-optimizations 200 --compiler-version v0.8.13+commit.abaa5c0e ${CONTRACT_ADDRESS} src/TheSpaceClaimAirdrop.sol:TheSpaceClaimAirdrop ${ETHERSCAN_API_KEY}
+	@forge verify-contract --chain-id ${CHAIN_ID} --constructor-args ${ABI_ENCODE_CONSTRUCTOR_ARGS} --num-of-optimizations 200 --compiler-version v0.8.13+commit.abaa5c0e ${CONTRACT_ADDRESS} ${ETHERSCAN_API_KEY}
