@@ -1,9 +1,11 @@
 [default]
+solc_version = "0.8.13"
 src = 'src'
 out = 'out'
 libs = ['lib']
 remappings = [
-    'ds-test/=lib/ds-test/src/'
+    'ds-test/=lib/ds-test/src/',
+    'openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/'
 ]
 fuzz_runs = 256
 verbosity = 3

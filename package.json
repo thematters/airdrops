@@ -1,20 +1,20 @@
 {
-  "name": "the-space-airdrop",
+  "name": "airdrops",
   "version": "1.0.0",
-  "description": "The Space Airdrop",
+  "description": "Airdrops",
   "private": false,
   "keywords": [
     "solidity",
     "contract",
     "airdrop"
   ],
-  "homepage": "https://github.com/thematters/the-space-airdrop#readme",
+  "homepage": "https://github.com/thematters/airdrops#readme",
   "bugs": {
-    "url": "https://github.com/thematters/the-space-airdrop/issues"
+    "url": "https://github.com/thematters/airdrops/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thematters/the-space-airdrop.git"
+    "url": "git+https://github.com/thematters/airdrops.git"
   },
   "scripts": {
     "lint": "npm run format && npm run solhint",

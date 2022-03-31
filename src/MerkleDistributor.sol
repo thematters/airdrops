@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.13;
 
-import "./dependencies/openzeppelin/Ownable.sol";
-import "./dependencies/openzeppelin/MerkleProof.sol";
-import "./dependencies/openzeppelin/IERC20.sol";
+import "openzeppelin-contracts/utils/cryptography/MerkleProof.sol";
+import "openzeppelin-contracts/access/Ownable.sol";
+import "openzeppelin-contracts/token/ERC20/IERC20.sol";
 import "./IMerkleDistributor.sol";
 
 // https://github.com/Uniswap/merkle-distributor
@@ -17,7 +17,7 @@ import "./IMerkleDistributor.sol";
  *
  * @author Michael Bauer <michael@m-bauer.org>
  */
-abstract contract MerkleDistributor is IMerkleDistributor, Ownable {
+contract MerkleDistributor is IMerkleDistributor, Ownable {
     address public immutable override token;
     bytes32 public immutable override merkleRoot;
     uint256 public immutable override expireTimestamp;
