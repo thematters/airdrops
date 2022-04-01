@@ -3,6 +3,8 @@ import keccak256 from 'keccak256' // Keccak256 hashing
 import MerkleTree from 'merkletreejs' // MerkleTree.js
 import { logger } from './logger' // Logging
 import { getAddress, parseUnits, solidityKeccak256 } from 'ethers/lib/utils' // Ethers utils
+import { putJSONFile } from './file'
+import path from 'path'
 
 // Airdrop recipient addresses and scaled token values
 type AirdropRecipient = {
@@ -10,6 +12,8 @@ type AirdropRecipient = {
   address: string
   // Scaled-to-decimals token value
   value: string
+  // Amount
+  amount: number
   // Index
   index?: number
   // Proof
@@ -34,6 +38,8 @@ export class Generator {
         address: getAddress(address),
         // Scaled number of tokens claimable by recipient
         value: parseUnits(tokens.toString(), decimals).toString(),
+        // Amount
+        amount: tokens,
       })
     }
   }
@@ -52,7 +58,7 @@ export class Generator {
     )
   }
 
-  async process(outputPath: string): Promise<void> {
+  async process(merkleOutputPath: string, proofsOutputPath: string): Promise<void> {
     logger.info('Generating Merkle tree.')
 
     // Generate merkle tree
@@ -75,17 +81,21 @@ export class Generator {
       const proof = merkleTree.getHexProof(leaf, index)
       proofs[index].index = index
       proofs[index].proof = proof
+
+      // Save proof
+      const addressPath = path.join(proofsOutputPath, `${recipient.address}.json`)
+      putJSONFile(addressPath, { proof, index, total: recipient.amount })
     })
 
     // Collect and save merkle tree + root
-    await fs.writeFileSync(
+    fs.writeFileSync(
       // Output to merkle.json
-      outputPath,
+      merkleOutputPath,
       // Root + full tree
       JSON.stringify(
         {
           root: merkleRoot,
-          proofs,
+          // proofs,
         },
         null,
         2

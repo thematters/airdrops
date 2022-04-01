@@ -10,8 +10,12 @@ const args = process.argv.slice(2)
     throwErrorAndExit('Missing input path')
   }
 
+  const basePath = path.join(__dirname, '..', inputPath)
+  const configPath: string = path.join(basePath, 'config.json')
+  const merkleOutputPath: string = path.join(basePath, 'merkle.json')
+  const proofsOutputPath: string = path.join(basePath, 'proofs')
+
   // Read config
-  const configPath: string = path.join(__dirname, '..', inputPath, 'config.json')
   const configData = readJSONFile(configPath)
   const decimals: number = configData.decimals ?? 18
 
@@ -24,12 +28,11 @@ const args = process.argv.slice(2)
   configData['sources'].forEach((src: string) => {
     const srcPath: string = path.join(__dirname, '..', inputPath, src)
     const srcData = readJSONFile(srcPath)
-    airdrops.push(srcData.airdrop)
+    airdrops.push(srcData)
   })
-  const airdrop = sum(airdrops)
+  const airdrop = sum(airdrops, proofsOutputPath)
 
   // Initialize and call generator
-  const outputPath: string = path.join(__dirname, '..', inputPath, 'merkle.json')
   const generator = new Generator(decimals, airdrop)
-  await generator.process(outputPath)
+  await generator.process(merkleOutputPath, proofsOutputPath)
 })()
