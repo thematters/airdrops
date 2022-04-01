@@ -8,20 +8,20 @@ import {Hevm} from './utils/Hevm.sol';
 import {console} from './utils/Console.sol';
 
 contract MerkleDistributorTest is DSTest {
-    ERC20Token private token;
-    MerkleDistributor private distributor;
+    ERC20Token public token;
+    MerkleDistributor public distributor;
 
-    Hevm constant vm = Hevm(HEVM_ADDRESS);
+    Hevm public vm = Hevm(HEVM_ADDRESS);
 
-    address constant DEPLOYER = address(175);
-    uint256 constant DEPLOYER_BALANCE = 100000e18;
+    address public constant DEPLOYER = address(175);
+    uint256 public constant DEPLOYER_BALANCE = 100000e18;
 
-    uint256 constant EXPIRED_AT = 1648720000;
+    uint256 public constant EXPIRED_AT = 1648720000;
 
-    bytes32 constant MERKLE_ROOT = 0xfc509a132749bf3defdee8950c44a9a83962d004f83c078c258dd3654fc540f2;
-    address ALICE = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
-    address BOB = 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45;
-    address CHARLIE = 0x7f268357A8c2552623316e2562D90e642bB538E5;
+    bytes32 public constant MERKLE_ROOT = 0xfc509a132749bf3defdee8950c44a9a83962d004f83c078c258dd3654fc540f2;
+    address public constant ALICE = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    address public constant BOB = 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45;
+    address public constant CHARLIE = 0x7f268357A8c2552623316e2562D90e642bB538E5;
 
     function setUp() public virtual {
         vm.label(DEPLOYER, 'DEPLOYER');

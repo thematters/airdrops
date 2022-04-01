@@ -21,14 +21,14 @@ jobs:
         with:
           version: nightly
 
-      - name: Run lint check
-        run: npm run lint:check
+      - name: Lint
+        run: npm run lint
 
       - name: Env
         run: cp .env.polygon-mumbai.example .env.local
 
-      - name: Built
+      - name: Build
         run: make build
 
-      - name: Run tests
+      - name: Test
         run: FOUNDRY_PROFILE=ci make test

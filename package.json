@@ -18,18 +18,14 @@
   },
   "scripts": {
     "lint": "npm run format && npm run solhint",
-    "lint:check": "npm run format:check && npm run solhint:check",
     "format": "prettier --write 'contracts/**/*.sol'",
-    "format:check": "prettier --check 'contracts/**/*.sol'",
-    "format:list": "prettier --list-different 'contracts/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'contracts/**/*.sol' --fix",
-    "solhint:check": "solhint --config ./.solhint.json 'contracts/**/*.sol'",
     "prepare": "husky install",
     "generate:merkle": "ts-node scripts/generate-merkle.ts"
   },
   "lint-staged": {
     "*.{ts,js,css,md,sol}": "npm run format",
-    "*.sol": "solhint"
+    "*.sol": "npm run solhint"
   },
   "author": "Matters Lab",
   "license": "Apache-2.0",
