@@ -2,10 +2,7 @@ name: Lint & Test
 
 on:
   push:
-    branches-ignore:
-      - master
-      - main
-      - develop
+    branches:
 
 jobs:
   run-ci:
