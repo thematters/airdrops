@@ -1,3 +1,5 @@
-MerkleDistributorTest:testBalance() (gas: 9909)
-MerkleDistributorTest:testClaim() (gas: 125723)
-MerkleDistributorTest:testFailClaim() (gas: 13537)
+MerkleDistributorTest:testBalance() (gas: 9887)
+MerkleDistributorTest:testBobClaimForAlice() (gas: 73359)
+MerkleDistributorTest:testClaim() (gas: 128070)
+MerkleDistributorTest:testFailClaim() (gas: 15774)
+MerkleDistributorTest:testFailClaimTwice() (gas: 76176)

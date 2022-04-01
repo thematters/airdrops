@@ -82,7 +82,6 @@ export class Generator {
       JSON.stringify(
         {
           root: merkleRoot,
-          tree: merkleTree,
           addresses: recipients,
         },
         null,
