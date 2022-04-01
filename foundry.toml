@@ -1,6 +1,6 @@
 [default]
 solc_version = "0.8.13"
-src = 'src'
+src = 'contracts'
 out = 'out'
 libs = ['lib']
 remappings = [
@@ -9,6 +9,7 @@ remappings = [
 ]
 fuzz_runs = 256
 verbosity = 3
+gas_reports = ["*"]
 
 [ci]
 fuzz_runs = 1024

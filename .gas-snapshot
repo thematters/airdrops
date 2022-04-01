@@ -1,0 +1,3 @@
+MerkleDistributorTest:testBalance() (gas: 9909)
+MerkleDistributorTest:testClaim() (gas: 125723)
+MerkleDistributorTest:testFailClaim() (gas: 13537)

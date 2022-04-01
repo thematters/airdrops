@@ -30,25 +30,18 @@ interface IMerkleDistributor {
     function merkleRoot() external view returns (bytes32);
 
     /**
-     * Returns true if the index has been marked as claimed.
-     */
-    function isClaimed(uint256 index) external view returns (bool);
-
-    /**
      * @notice Claim and transfer tokens
      *
      * Verifies the provided proof and params
      * and transfers 'amount' of tokens to 'account'.
      *
-     * @param index Index of claim
      * @param account Address of claim
      * @param amount Amount of claim
-     * @param proof Merkle proof for (index, account, amount)
+     * @param proof Merkle proof for (account, amount)
      *
      * Emits a {Claimed} event on success.
      */
     function claim(
-        uint256 index,
         address account,
         uint256 amount,
         bytes32[] calldata proof
@@ -71,8 +64,8 @@ interface IMerkleDistributor {
     function sweepToOwner() external;
 
     /**
-     * @dev Emitted when an airdrop is claimed for an `account`. `index` is the index
+     * @dev Emitted when an airdrop is claimed for an `account`.
      * in the merkle tree, `value` is the amount of tokens claimed and transferred.
      */
-    event Claimed(uint256 indexed claimIndex, address indexed account, uint256 amount);
+    event Claimed(address indexed account, uint256 amount);
 }

@@ -19,13 +19,13 @@
   "scripts": {
     "lint": "npm run format && npm run solhint",
     "lint:check": "npm run format:check && npm run solhint:check",
-    "format": "prettier --write 'src/**/*.sol'",
-    "format:check": "prettier --check 'src/**/*.sol'",
-    "format:list": "prettier --list-different 'src/**/*.sol'",
-    "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
-    "solhint:check": "solhint --config ./.solhint.json 'src/**/*.sol'",
-    "ganache": "ganache",
-    "prepare": "husky install"
+    "format": "prettier --write 'contracts/**/*.sol'",
+    "format:check": "prettier --check 'contracts/**/*.sol'",
+    "format:list": "prettier --list-different 'contracts/**/*.sol'",
+    "solhint": "solhint --config ./.solhint.json 'contracts/**/*.sol' --fix",
+    "solhint:check": "solhint --config ./.solhint.json 'contracts/**/*.sol'",
+    "prepare": "husky install",
+    "generate:merkle": "ts-node scripts/generate-merkle.ts"
   },
   "lint-staged": {
     "*.{ts,js,css,md,sol}": "npm run format",
@@ -34,11 +34,20 @@
   "author": "Matters Lab",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@types/node": "^17.0.23",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.7",
     "prettier": "^2.6.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.7",
-    "solhint-plugin-prettier": "^0.0.5"
+    "solhint-plugin-prettier": "^0.0.5",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "ethers": "^5.6.2",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.2.31",
+    "winston": "^3.6.0"
   }
 }

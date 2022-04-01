@@ -16,7 +16,7 @@ trace: clean
 
 # Deployments
 deploy: clean
-	@forge create TheSpaceAirdrop --rpc-url ${ETH_RPC_URL} --private-key ${DEPLOYER_PRIVATE_KEY} --constructor-args ${TOKEN_ADDRESS} --constructor-args ${MERKLE_ROOT} --constructor-args ${EXPIRED_AT}
+	@forge create MerkleDistributor --rpc-url ${ETH_RPC_URL} --private-key ${DEPLOYER_PRIVATE_KEY} --constructor-args ${TOKEN_ADDRESS} --constructor-args ${MERKLE_ROOT} --constructor-args ${EXPIRED_AT}
 
 # Verifications
 check-verification:
