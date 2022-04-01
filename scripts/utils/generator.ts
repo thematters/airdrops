@@ -10,6 +10,8 @@ type AirdropRecipient = {
   address: string
   // Scaled-to-decimals token value
   value: string
+  // Index
+  index?: number
   // Proof
   proof?: string[]
 }
@@ -67,11 +69,12 @@ export class Generator {
     logger.info(`Generated Merkle root: ${merkleRoot}`)
 
     // Collect proofs of leaves
-    const recipients = [...this.recipients]
-    recipients.forEach((recipient, index) => {
+    const proofs = [...this.recipients]
+    proofs.forEach((recipient, index) => {
       const leaf = this.generateLeaf(recipient.address, recipient.value)
       const proof = merkleTree.getHexProof(leaf, index)
-      recipients[index].proof = proof
+      proofs[index].index = index
+      proofs[index].proof = proof
     })
 
     // Collect and save merkle tree + root
@@ -82,7 +85,7 @@ export class Generator {
       JSON.stringify(
         {
           root: merkleRoot,
-          addresses: recipients,
+          proofs,
         },
         null,
         2

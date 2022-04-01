@@ -9,5 +9,19 @@ A fork from [merkle-airdrop-starter](https://github.com/Anish-Agnihotri/merkle-a
 npm install
 
 # Generate Merkle Root
-npm run generate:merkle -- ./data/thespace
+npm run generate:merkle -- ./data/alice
+```
+
+## Test
+
+```bash
+cp .env.polygon-mumbai.example .env.polygon-mumbai
+
+make test NETWORK=polygon-mumbai
+```
+
+## Deployment
+
+```bash
+make deploy NETWORK=polygon-mumbai
 ```
