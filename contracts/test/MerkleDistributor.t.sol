@@ -48,6 +48,9 @@ contract MerkleDistributorTest is DSTest {
         assertEq(distributorBalance, DEPLOYER_BALANCE);
     }
 
+    /**
+     * claim
+     */
     function _claim(
         address account,
         uint256 amount,
@@ -55,7 +58,6 @@ contract MerkleDistributorTest is DSTest {
     ) private {
         vm.deal(account, 0);
         distributor.claim(account, amount, merkleProof);
-        assertEq(token.balanceOf(account), amount);
     }
 
     /// @notice Alice and Bob claim successfully
@@ -67,6 +69,7 @@ contract MerkleDistributorTest is DSTest {
         aliceProof[2] = 0x28f666abe594c6468cd5a251dd392713c3f01d0488c2598c3d0b72522aadf6ae;
         vm.prank(ALICE);
         _claim(ALICE, 10e18, aliceProof);
+        assertEq(token.balanceOf(ALICE), 10e18);
 
         // Bob claims 0.32 $TOKEN
         bytes32[] memory bobProof = new bytes32[](3);
@@ -75,10 +78,11 @@ contract MerkleDistributorTest is DSTest {
         bobProof[2] = 0x28f666abe594c6468cd5a251dd392713c3f01d0488c2598c3d0b72522aadf6ae;
         vm.prank(BOB);
         _claim(BOB, 32e16, bobProof);
+        assertEq(token.balanceOf(BOB), 32e16);
     }
 
     /// @notice Alice and Bob claim successfully
-    function testFailClaimTwice() public {
+    function testCannotClaimTwice() public {
         // Alice claims 100 $TOKEN
         bytes32[] memory aliceProof = new bytes32[](3);
         aliceProof[0] = 0x98bb949ca75e092f3e9c8e09d23063c64698f36937c6d2fe9c2144b8c4a1fbc2;
@@ -88,19 +92,22 @@ contract MerkleDistributorTest is DSTest {
         // success
         vm.prank(ALICE);
         _claim(ALICE, 10e18, aliceProof);
+        assertEq(token.balanceOf(ALICE), 10e18);
 
         // failure
+        vm.expectRevert('MerkleDistributor: Drop already claimed.');
         vm.prank(ALICE);
         _claim(ALICE, 10e18, aliceProof);
     }
 
     /// @notice Charlie claims with wrong a proof
-    function testFailClaim() public {
+    function testCannotClaimWithWrongProof() public {
         bytes32[] memory wrongProof = new bytes32[](3);
         wrongProof[0] = 0x98bb949ca75e092f3e9c8e09d23063c64698f36937c6d2fe9c2144b8c4a1fbc2;
         wrongProof[1] = 0xe34ddb23ff40befd09095e53709edf85520e770273dab8b857fc60c68727003f;
         wrongProof[2] = 0x28f666abe594c6468cd5a251dd392713c3f01d0488c2598c3d0b72522aadf6ae;
 
+        vm.expectRevert('MerkleDistributor: Invalid proof.');
         vm.prank(CHARLIE);
         _claim(CHARLIE, 10e18, wrongProof);
     }
@@ -114,5 +121,58 @@ contract MerkleDistributorTest is DSTest {
 
         vm.prank(BOB);
         _claim(ALICE, 10e18, aliceProof);
+        assertEq(token.balanceOf(ALICE), 10e18);
+    }
+
+    /**
+     * sweep
+     */
+    function testCannotSweepByNonOwner() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        distributor.sweep(DEPLOYER);
+    }
+
+    function testCannotSweepIfNotExpired() public {
+        vm.expectRevert('MerkleDistributor: Drop not expired');
+        vm.prank(DEPLOYER);
+        distributor.sweep(DEPLOYER);
+    }
+
+    function testSweep() public {
+        uint256 contractBalance = token.balanceOf(address(distributor));
+        uint256 deployerBalance = token.balanceOf(DEPLOYER);
+
+        vm.warp(EXPIRED_AT + 1);
+        vm.prank(DEPLOYER);
+        distributor.sweep(DEPLOYER);
+
+        // distributor balance should be 0
+        assertEq(token.balanceOf(address(distributor)), 0);
+
+        // deployer balance should be increased
+        assertEq(token.balanceOf(DEPLOYER), deployerBalance + contractBalance);
+    }
+
+    /**
+     * sweepToOwner
+     */
+    function testCannotSweepToOwnerIfNotExpired() public {
+        vm.expectRevert('MerkleDistributor: Drop not expired');
+        vm.prank(DEPLOYER);
+        distributor.sweepToOwner();
+    }
+
+    function testSweepToOwner() public {
+        uint256 contractBalance = token.balanceOf(address(distributor));
+        uint256 deployerBalance = token.balanceOf(DEPLOYER);
+
+        vm.warp(EXPIRED_AT + 1);
+        distributor.sweepToOwner();
+
+        // distributor balance should be 0
+        assertEq(token.balanceOf(address(distributor)), 0);
+
+        // deployer balance should be increased
+        assertEq(token.balanceOf(DEPLOYER), deployerBalance + contractBalance);
     }
 }
