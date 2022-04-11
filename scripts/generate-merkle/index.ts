@@ -1,5 +1,8 @@
-import path from 'path' // Path routing
-import { sum, Airdrop, Generator, readJSONFile, throwErrorAndExit } from './utils'
+import path from 'path'
+
+import { Generator } from './generator'
+import { sum, Airdrop } from './sum'
+import { readJSONFile, throwErrorAndExit } from '../utils'
 
 const args = process.argv.slice(2)
 
@@ -10,7 +13,7 @@ const args = process.argv.slice(2)
     throwErrorAndExit('Missing input path')
   }
 
-  const basePath = path.join(__dirname, '..', inputPath)
+  const basePath = path.join(__dirname, '../..', inputPath)
   const configPath: string = path.join(basePath, 'config.json')
   const merkleOutputPath: string = path.join(basePath, 'merkle.json')
   const proofsOutputPath: string = path.join(basePath, 'proofs')
@@ -26,7 +29,7 @@ const args = process.argv.slice(2)
 
   let airdrops: Airdrop[] = []
   configData['sources'].forEach((src: string) => {
-    const srcPath: string = path.join(__dirname, '..', inputPath, src)
+    const srcPath: string = path.join(__dirname, '../..', inputPath, src)
     const srcData = readJSONFile(srcPath)
     airdrops.push(srcData)
   })

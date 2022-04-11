@@ -1,6 +1,7 @@
 import fs from 'fs' // Filesystem
-import { throwErrorAndExit } from './error'
 import path from 'path'
+
+import { throwErrorAndExit } from './error'
 
 export const readJSONFile = (dst: string, ignore: boolean = false) => {
   if (!fs.existsSync(dst)) {

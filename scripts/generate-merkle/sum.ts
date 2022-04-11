@@ -1,5 +1,6 @@
 import path from 'path'
-import { putJSONFile } from './file'
+
+import { putJSONFile } from '../utils/file'
 
 export type AirdropItem = Record<string, number>
 

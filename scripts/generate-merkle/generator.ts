@@ -1,10 +1,11 @@
 import fs from 'fs' // Filesystem
 import keccak256 from 'keccak256' // Keccak256 hashing
 import MerkleTree from 'merkletreejs' // MerkleTree.js
-import { logger } from './logger' // Logging
 import { getAddress, parseUnits, solidityKeccak256 } from 'ethers/lib/utils' // Ethers utils
-import { putJSONFile } from './file'
 import path from 'path'
+
+import { logger } from '../utils/logger' // Logging
+import { putJSONFile } from '../utils/file'
 
 // Airdrop recipient addresses and scaled token values
 type AirdropRecipient = {
