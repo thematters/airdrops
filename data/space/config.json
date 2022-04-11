@@ -1,0 +1,4 @@
+{
+    "decimals": 18,
+    "sources": ["./poap-18004.json", "./poap-19036.json", "./poap-31209.json"]
+}
