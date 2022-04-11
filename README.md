@@ -9,6 +9,7 @@ A fork from [merkle-airdrop-starter](https://github.com/Anish-Agnihotri/merkle-a
 npm install
 
 # Scrape address list
+npm run scrape:tokens -- ./data/space
 npm run scrape:poap -- ./data/space
 
 # Generate Merkle Root

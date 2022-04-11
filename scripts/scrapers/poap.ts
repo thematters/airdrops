@@ -44,9 +44,11 @@ const makeQuery = (eventId: string) => `
     const query = makeQuery(eventId)
     const response = await axios.post(API_ENDPOINT, { query })
 
+    // address to amount
+    const amountPerToken = events[eventId]
     const addresses: { [address: string]: number } = {}
     response.data.data.tokens.forEach((token: any) => {
-      addresses[token.owner.id] = events[eventId]
+      addresses[token.owner.id] = amountPerToken
     })
 
     const data = {

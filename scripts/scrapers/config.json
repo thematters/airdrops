@@ -3,5 +3,12 @@
     "18004": 5,
     "19036": 10,
     "31209": 20
+  },
+  "tokens": {
+    "0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": {
+      "network": "mainnet",
+      "fromBlock": 13553873,
+      "amount": 100
+    }
   }
 }
