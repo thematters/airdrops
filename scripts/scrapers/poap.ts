@@ -52,6 +52,7 @@ const makeQuery = (eventId: string) => `
     const data = {
       category: `poap-${eventId}`,
       airdrop: addresses,
+      createdAt: new Date().toISOString(),
     }
 
     const outputPath = path.join(basePath, `poap-${eventId}.json`)
