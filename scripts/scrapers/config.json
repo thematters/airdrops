@@ -8,7 +8,13 @@
     "0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": {
       "network": "mainnet",
       "fromBlock": 13553873,
-      "amount": 100
+      "amount": 100,
+      "mode": "cumulative"
+    },
+    "0xcdf8d568ec808de5fcbb35849b5bafb5d444d4c0": {
+      "network": "polygon",
+      "fromBlock": 26141086,
+      "amount": 50
     }
   }
 }

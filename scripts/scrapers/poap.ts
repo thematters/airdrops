@@ -1,7 +1,7 @@
 import path from 'path'
 import axios from 'axios'
 
-import { putJSONFile, readJSONFile, throwErrorAndExit } from '../utils'
+import { logger, putJSONFile, readJSONFile, throwErrorAndExit } from '../utils'
 
 const args = process.argv.slice(2)
 
@@ -57,6 +57,7 @@ const makeQuery = (eventId: string) => `
       createdAt: new Date().toISOString(),
     }
 
+    logger.info(`Scrapped POAP (${eventId}) owners: ${Object.keys(addresses).length}`)
     const outputPath = path.join(basePath, `poap-${eventId}.json`)
 
     putJSONFile(outputPath, data)

@@ -1,8 +1,9 @@
 import path from 'path'
 
-import { putJSONFile, readJSONFile, throwErrorAndExit, getAllAssetTransfers } from '../utils'
+import { putJSONFile, readJSONFile, throwErrorAndExit, getAllAssetTransfers, logger } from '../utils'
 
-type TokenContract = { network: string; fromBlock: number; amount: number }
+type TokenContract = { network: string; fromBlock: number; amount: number; mode: 'cumulative' | undefined }
+
 type Transfer = { from: string; to: string; erc721TokenId: string }
 
 const args = process.argv.slice(2)
@@ -24,7 +25,13 @@ const args = process.argv.slice(2)
 
   // Scrape from The Graph
   for (const contract of contracts) {
-    const transfers = await getAllAssetTransfers(contract, tokenContracts[contract].fromBlock)
+    const tokenContract = tokenContracts[contract]
+    const transfers = await getAllAssetTransfers({
+      contract,
+      network: tokenContract.network,
+      fromBlock: tokenContract.fromBlock,
+      category: ['erc721'],
+    })
 
     // token to owner address
     const tokens: { [id: string]: string } = {}
@@ -33,11 +40,11 @@ const args = process.argv.slice(2)
     })
 
     // address to amount
-    const amountPerToken = tokenContracts[contract].amount
+    const amountPerToken = tokenContract.amount
     const addresses: { [address: string]: number } = {}
     Object.keys(tokens).forEach((id) => {
       const address = tokens[id]
-      if (addresses[address]) {
+      if (addresses[address] && tokenContract.mode === 'cumulative') {
         addresses[address] += amountPerToken
       } else {
         addresses[address] = amountPerToken
@@ -50,6 +57,7 @@ const args = process.argv.slice(2)
       createdAt: new Date().toISOString(),
     }
 
+    logger.info(`Scrapped Token (${contract}) owners: ${Object.keys(addresses).length}`)
     const outputPath = path.join(basePath, `token-${contract}.json`)
 
     putJSONFile(outputPath, data)

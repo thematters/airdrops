@@ -2,6 +2,7 @@
     "decimals": 18,
     "sources": [
       "./token-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8.json",
+      "./token-0xcdf8d568ec808de5fcbb35849b5bafb5d444d4c0.json",
       "./poap-18004.json",
       "./poap-19036.json",
       "./poap-31209.json"
