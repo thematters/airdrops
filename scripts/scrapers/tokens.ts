@@ -1,5 +1,6 @@
 import { getAddress } from 'ethers/lib/utils'
 import path from 'path'
+import _ from 'lodash'
 
 import { putJSONFile, readJSONFile, throwErrorAndExit, getAllAssetTransfers, logger } from '../utils'
 
@@ -59,8 +60,15 @@ const args = process.argv.slice(2)
     }
 
     logger.info(`Scrapped Token (${contract}) owners: ${Object.keys(addresses).length}`)
-    const outputPath = path.join(basePath, `token-${contract}.json`)
 
+    // outputs
+    const outputPath = path.join(basePath, `token-${contract}.json`)
     putJSONFile(outputPath, data)
+
+    // update merkle config
+    const merkleConfigPath = path.join(basePath, `config.json`)
+    const merkleConfig = readJSONFile(merkleConfigPath)
+    const sources = _.uniq([...merkleConfig.sources, `./token-${contract}.json`])
+    putJSONFile(merkleConfigPath, { ...merkleConfig, sources })
   }
 })()

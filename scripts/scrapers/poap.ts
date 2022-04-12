@@ -1,6 +1,7 @@
 import path from 'path'
 import axios from 'axios'
 import { getAddress } from 'ethers/lib/utils'
+import _ from 'lodash'
 
 import { logger, putJSONFile, readJSONFile, throwErrorAndExit } from '../utils'
 
@@ -59,8 +60,15 @@ const makeQuery = (eventId: string) => `
     }
 
     logger.info(`Scrapped POAP (${eventId}) owners: ${Object.keys(addresses).length}`)
-    const outputPath = path.join(basePath, `poap-${eventId}.json`)
 
+    // outputs
+    const outputPath = path.join(basePath, `poap-${eventId}.json`)
     putJSONFile(outputPath, data)
+
+    // update merkle config
+    const merkleConfigPath = path.join(basePath, `config.json`)
+    const merkleConfig = readJSONFile(merkleConfigPath)
+    const sources = _.uniq([...merkleConfig.sources, `./poap-${eventId}.json`])
+    putJSONFile(merkleConfigPath, { ...merkleConfig, sources })
   }
 })()
