@@ -1,3 +1,4 @@
+import { getAddress } from 'ethers/lib/utils'
 import path from 'path'
 
 import { putJSONFile, readJSONFile, throwErrorAndExit, getAllAssetTransfers, logger } from '../utils'
@@ -43,7 +44,7 @@ const args = process.argv.slice(2)
     const amountPerToken = tokenContract.amount
     const addresses: { [address: string]: number } = {}
     Object.keys(tokens).forEach((id) => {
-      const address = tokens[id]
+      const address = getAddress(tokens[id])
       if (addresses[address] && tokenContract.mode === 'cumulative') {
         addresses[address] += amountPerToken
       } else {

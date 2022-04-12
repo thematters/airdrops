@@ -1,5 +1,6 @@
 import path from 'path'
 import axios from 'axios'
+import { getAddress } from 'ethers/lib/utils'
 
 import { logger, putJSONFile, readJSONFile, throwErrorAndExit } from '../utils'
 
@@ -48,7 +49,7 @@ const makeQuery = (eventId: string) => `
     const amountPerToken = events[eventId]
     const addresses: { [address: string]: number } = {}
     response.data.data.tokens.forEach((token: any) => {
-      addresses[token.owner.id] = amountPerToken
+      addresses[getAddress(token.owner.id)] = amountPerToken
     })
 
     const data = {
