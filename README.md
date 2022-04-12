@@ -13,7 +13,7 @@ Install [Foundry](https://github.com/gakonst/foundry) for contract development a
 
 ## Take Snapshots
 
-To take snapshots from POAPs and token contracts, please config `scripts/scrapers/config.json`.
+To take snapshots from POAPs and token contracts, please config `scripts/snapshots/config.json`.
 
 ### POAP
 
@@ -23,7 +23,7 @@ We use [POAP subgraph](https://thegraph.com/hosted-service/subgraph/poap-xyz/poa
 
 ```bash
 # `./data/space` is the output directory
-npm run scrape:poap -- ./data/space
+npm run snapshot:poap -- ./data/space
 ```
 
 ### Tokens (ERC-721, ERC-20, ERC-1155)
@@ -32,7 +32,7 @@ We use [Alchemy Transfers API](https://docs.alchemy.com/alchemy/enhanced-apis/tr
 
 ```bash
 # `./data/space` is the output directory
-npm run scrape:tokens -- ./data/space
+npm run snapshot:tokens -- ./data/space
 ```
 
 ## Generate Merkle Root
