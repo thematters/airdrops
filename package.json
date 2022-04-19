@@ -21,8 +21,9 @@
     "format": "prettier --write 'contracts/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'contracts/**/*.sol' --fix",
     "prepare": "husky install",
-    "snapshot:tokens": "ts-node scripts/snapshots/tokens.ts",
     "snapshot:poap": "ts-node scripts/snapshots/poap.ts",
+    "snapshot:tokens": "ts-node scripts/snapshots/tokens.ts",
+    "snapshot:transfers": "ts-node scripts/snapshots/transfers.ts",
     "generate:merkle": "ts-node scripts/generate-merkle/index.ts"
   },
   "lint-staged": {

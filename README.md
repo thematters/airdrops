@@ -15,24 +15,39 @@ Install [Foundry](https://github.com/gakonst/foundry) for contract development a
 
 To take snapshots from POAPs and token contracts, please config `scripts/snapshots/config.json`.
 
+```bash
+# `./data/space` is the output directory
+npm run snapshot -- ./data/space
+```
+
 ### POAP
+
+Distribute amount of tokens to POAP owners.
 
 We use [POAP subgraph](https://thegraph.com/hosted-service/subgraph/poap-xyz/poap-xdai) of The Graph as the source.
 
 **Note:** Limits on 1000 addresses, needs support for pagination.
 
 ```bash
-# `./data/space` is the output directory
 npm run snapshot:poap -- ./data/space
 ```
 
 ### Tokens (ERC-721, ERC-20, ERC-1155)
 
+Distribute amount of tokens to token owners.
+
 We use [Alchemy Transfers API](https://docs.alchemy.com/alchemy/enhanced-apis/transfers-api) as the source.
 
 ```bash
-# `./data/space` is the output directory
 npm run snapshot:tokens -- ./data/space
+```
+
+### Transfers
+
+Distribute amount of tokens based on transfer count.
+
+```bash
+npm run snapshot:transfers -- ./data/space
 ```
 
 ## Generate Merkle Root

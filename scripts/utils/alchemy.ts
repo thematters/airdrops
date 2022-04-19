@@ -7,6 +7,7 @@ type AssetTransferParams = {
   contract: string
   network: string
   fromBlock: number
+  toBlock?: number | null
   nextPageKey?: string
   category?: Array<'external' | 'internal' | 'token' | 'erc20' | 'erc721' | 'erc1155'>
 }
@@ -19,6 +20,7 @@ export const getAssetTransfers = async ({
   contract,
   network,
   fromBlock,
+  toBlock,
   nextPageKey,
   category,
 }: AssetTransferParams) => {
@@ -26,6 +28,7 @@ export const getAssetTransfers = async ({
   const baseURL = {
     mainnet: `https://eth-mainnet.alchemyapi.io/v2/${apiKey}`,
     polygon: `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}`,
+    mumbai: `https://polygon-mumbai.g.alchemy.com/v2/${apiKey}`,
   }[network]
 
   console.log(`Retrieving ${contract} transfers from ${network}`, { nextPageKey })
@@ -42,6 +45,7 @@ export const getAssetTransfers = async ({
         {
           contractAddresses: [contract],
           fromBlock: web3.utils.numberToHex(fromBlock),
+          toBlock: toBlock || undefined,
           category: category || ['erc721'],
           excludeZeroValue: false,
           // maxCount: web3.utils.numberToHex(1000),
