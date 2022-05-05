@@ -45,7 +45,7 @@ export const getAssetTransfers = async ({
         {
           contractAddresses: [contract],
           fromBlock: web3.utils.numberToHex(fromBlock),
-          toBlock: toBlock || undefined,
+          toBlock: toBlock ? web3.utils.numberToHex(toBlock) : undefined,
           category: category || ['erc721'],
           excludeZeroValue: false,
           // maxCount: web3.utils.numberToHex(1000),
