@@ -85,7 +85,6 @@ export class Generator {
 
       // Save proof
       const addressPath = path.join(proofsOutputPath, `${recipient.address.toLowerCase()}.json`)
-      console.log(addressPath)
       putJSONFile(addressPath, { proof, index, total: recipient.amount })
     })
 

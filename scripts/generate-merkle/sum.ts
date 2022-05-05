@@ -25,7 +25,7 @@ export const sum = (airdrops: Airdrop[], proofsOutputPath: string): AirdropItem 
         airdrop[address] = amount
       }
 
-      const addressPath = path.join(proofsOutputPath, `${address}.json`)
+      const addressPath = path.join(proofsOutputPath, `${address.toLocaleLowerCase()}.json`)
       putJSONFile(addressPath, { [drop.category]: amount })
     })
   })
