@@ -3,6 +3,24 @@ import axios from 'axios'
 import dotenv from 'dotenv'
 import web3 from 'web3'
 
+dotenv.config({
+  path: path.join(__dirname, '../..', '.env.polygon-mumbai'),
+})
+
+const getBaseURL = ({ network }: { network: string }) => {
+  const apiKey = process.env.ALCHEMY_API_KEY
+  const baseURL = {
+    mainnet: `https://eth-mainnet.alchemyapi.io/v2/${apiKey}`,
+    polygon: `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}`,
+    mumbai: `https://polygon-mumbai.g.alchemy.com/v2/${apiKey}`,
+  }[network]
+
+  return baseURL
+}
+
+/**
+ * Transfer
+ */
 type AssetTransferParams = {
   contract: string
   network: string
@@ -12,10 +30,6 @@ type AssetTransferParams = {
   category?: Array<'external' | 'internal' | 'token' | 'erc20' | 'erc721' | 'erc1155'>
 }
 
-dotenv.config({
-  path: path.join(__dirname, '../..', '.env.polygon-mumbai'),
-})
-
 export const getAssetTransfers = async ({
   contract,
   network,
@@ -24,12 +38,7 @@ export const getAssetTransfers = async ({
   nextPageKey,
   category,
 }: AssetTransferParams) => {
-  const apiKey = process.env.ALCHEMY_API_KEY
-  const baseURL = {
-    mainnet: `https://eth-mainnet.alchemyapi.io/v2/${apiKey}`,
-    polygon: `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}`,
-    mumbai: `https://polygon-mumbai.g.alchemy.com/v2/${apiKey}`,
-  }[network]
+  const baseURL = getBaseURL({ network })
 
   console.log(`Retrieving ${contract} transfers from ${network}`, { nextPageKey })
 
@@ -76,4 +85,26 @@ export const getAllAssetTransfers = async (params: AssetTransferParams) => {
   }
 
   return transfers
+}
+
+/**
+ * Token Owners
+ */
+type ContractOwnersParams = {
+  contract: string
+  network: string
+}
+
+export const getOwnersForCollection = async ({ contract, network }: ContractOwnersParams) => {
+  const baseURL = getBaseURL({ network })
+
+  console.log(`Retrieving ${contract} owners from ${network}`)
+
+  const response = await axios({
+    method: 'get',
+    url: `${baseURL}/getOwnersForCollection?contractAddress=${contract}`,
+    headers: {},
+  })
+
+  return response.data.ownerAddresses
 }

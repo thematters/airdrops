@@ -1,12 +1,15 @@
 {
   "decimals": 18,
   "sources": [
-    "./token-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8.json",
-    "./token-0xcdf8d568ec808de5fcbb35849b5bafb5d444d4c0.json",
-    "./poap-18004.json",
-    "./poap-19036.json",
-    "./poap-31209.json",
     "./transfer-0x70bf60048d634173e29ceda160c0b4300bdba973.json",
-    "./transfer-0xa69b77089b1d2b01212128593146125f28f0a7fd.json"
+    "./transfer-0xa69b77089b1d2b01212128593146125f28f0a7fd.json",
+    "./transfer-0x7edbb61ccea2f29e31525d33f310a9ea943c7a89.json",
+    "./poap-18004.json",
+    "./poap-19035.json",
+    "./poap-19036.json",
+    "./poap-20539.json",
+    "./poap-22376.json",
+    "./poap-24337.json",
+    "./token-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8.json"
   ]
 }

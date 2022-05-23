@@ -38,7 +38,7 @@ const makeQuery = (eventId: string) => `
 
   // Read config
   const configData = readJSONFile(configPath)
-  const events: { [eventId: string]: number } = configData.POAPs
+  const events: { [eventId: string]: { amount: number } } = configData.POAPs
   const eventIds = Object.keys(events)
 
   // Scrape from The Graph
@@ -47,7 +47,7 @@ const makeQuery = (eventId: string) => `
     const response = await axios.post(API_ENDPOINT, { query })
 
     // address to amount
-    const amountPerToken = events[eventId]
+    const amountPerToken = events[eventId].amount
     const addresses: { [address: string]: number } = {}
     response.data.data.tokens.forEach((token: any) => {
       addresses[getAddress(token.owner.id)] = amountPerToken

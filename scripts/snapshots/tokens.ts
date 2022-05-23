@@ -2,7 +2,14 @@ import { getAddress } from 'ethers/lib/utils'
 import path from 'path'
 import _ from 'lodash'
 
-import { putJSONFile, readJSONFile, throwErrorAndExit, getAllAssetTransfers, logger } from '../utils'
+import {
+  putJSONFile,
+  readJSONFile,
+  throwErrorAndExit,
+  getAllAssetTransfers,
+  getOwnersForCollection,
+  logger,
+} from '../utils'
 
 type TokenContract = { network: string; fromBlock: number; toBlock?: number; amount: number; cumulative?: boolean }
 
@@ -28,31 +35,55 @@ const args = process.argv.slice(2)
   // Scrape from Alchemy
   for (const contract of contracts) {
     const tokenContract = tokenContracts[contract]
-    const transfers = await getAllAssetTransfers({
-      contract,
-      network: tokenContract.network,
-      fromBlock: tokenContract.fromBlock,
-      toBlock: tokenContract.toBlock,
-      category: ['erc721'],
-    })
 
-    // token to owner address
-    const tokens: { [id: string]: string } = {}
-    transfers.forEach((transfer: Transfer) => {
-      tokens[transfer.erc721TokenId] = transfer.to
-    })
-
-    // address to amount
-    const amountPerToken = tokenContract.amount
     const addresses: { [address: string]: number } = {}
-    Object.keys(tokens).forEach((id) => {
-      const address = getAddress(tokens[id])
-      if (addresses[address] && tokenContract.cumulative) {
-        addresses[address] += amountPerToken
-      } else {
-        addresses[address] = amountPerToken
-      }
-    })
+
+    // use simple `getOwnersForCollection` if it's not cumulative
+    if (!tokenContract.cumulative) {
+      const owners = (await getOwnersForCollection({
+        contract,
+        network: tokenContract.network,
+      })) as string[]
+
+      // address to amount
+      const amountPerToken = tokenContract.amount
+      const addresses: { [address: string]: number } = {}
+      owners.forEach((address) => {
+        const validAddress = getAddress(address)
+        if (addresses[validAddress] && tokenContract.cumulative) {
+          addresses[validAddress] += amountPerToken
+        } else {
+          addresses[validAddress] = amountPerToken
+        }
+      })
+    }
+    // use `getAllAssetTransfers` if it's cumulative
+    else {
+      const transfers = await getAllAssetTransfers({
+        contract,
+        network: tokenContract.network,
+        fromBlock: tokenContract.fromBlock,
+        toBlock: tokenContract.toBlock,
+        category: ['erc721'],
+      })
+
+      // token to owner address
+      const tokens: { [id: string]: string } = {}
+      transfers.forEach((transfer: Transfer) => {
+        tokens[transfer.erc721TokenId] = transfer.to
+      })
+
+      // address to amount
+      const amountPerToken = tokenContract.amount
+      Object.keys(tokens).forEach((id) => {
+        const address = getAddress(tokens[id])
+        if (addresses[address] && tokenContract.cumulative) {
+          addresses[address] += amountPerToken
+        } else {
+          addresses[address] = amountPerToken
+        }
+      })
+    }
 
     const data = {
       category: `token-${contract}`,
