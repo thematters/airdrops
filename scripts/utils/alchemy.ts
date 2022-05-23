@@ -108,3 +108,23 @@ export const getOwnersForCollection = async ({ contract, network }: ContractOwne
 
   return response.data.ownerAddresses
 }
+
+type TokenIdOwnersParams = {
+  contract: string
+  network: string
+  tokenId: string
+}
+
+export const getOwnersForToken = async ({ contract, network, tokenId }: TokenIdOwnersParams) => {
+  const baseURL = getBaseURL({ network })
+
+  console.log(`Retrieving ${contract}:${tokenId} owners from ${network}`)
+
+  const response = await axios({
+    method: 'get',
+    url: `${baseURL}/getOwnersForToken?contractAddress=${contract}&tokenId=${tokenId}`,
+    headers: {},
+  })
+
+  return response.data.owners
+}

@@ -11,7 +11,7 @@ import {
   logger,
 } from '../utils'
 
-type TokenContract = { network: string; fromBlock: number; toBlock?: number; amount: number; cumulative?: boolean }
+type CollectionContract = { network: string; fromBlock: number; toBlock?: number; amount: number; cumulative?: boolean }
 
 type Transfer = { from: string; to: string; erc721TokenId: string }
 
@@ -29,28 +29,27 @@ const args = process.argv.slice(2)
 
   // Read config
   const configData = readJSONFile(configPath)
-  const tokenContracts: { [address: string]: TokenContract } = configData.tokens
-  const contracts = Object.keys(tokenContracts)
+  const collectionContracts: { [address: string]: CollectionContract } = configData.collectionOwners
+  const keys = Object.keys(collectionContracts)
 
   // Scrape from Alchemy
-  for (const contract of contracts) {
-    const tokenContract = tokenContracts[contract]
+  for (const key of keys) {
+    const collectionContract = collectionContracts[key]
 
     const addresses: { [address: string]: number } = {}
 
     // use simple `getOwnersForCollection` if it's not cumulative
-    if (!tokenContract.cumulative) {
+    if (!collectionContract.cumulative) {
       const owners = (await getOwnersForCollection({
-        contract,
-        network: tokenContract.network,
+        contract: key,
+        network: collectionContract.network,
       })) as string[]
 
       // address to amount
-      const amountPerToken = tokenContract.amount
-      const addresses: { [address: string]: number } = {}
+      const amountPerToken = collectionContract.amount
       owners.forEach((address) => {
         const validAddress = getAddress(address)
-        if (addresses[validAddress] && tokenContract.cumulative) {
+        if (addresses[validAddress] && collectionContract.cumulative) {
           addresses[validAddress] += amountPerToken
         } else {
           addresses[validAddress] = amountPerToken
@@ -60,10 +59,10 @@ const args = process.argv.slice(2)
     // use `getAllAssetTransfers` if it's cumulative
     else {
       const transfers = await getAllAssetTransfers({
-        contract,
-        network: tokenContract.network,
-        fromBlock: tokenContract.fromBlock,
-        toBlock: tokenContract.toBlock,
+        contract: key,
+        network: collectionContract.network,
+        fromBlock: collectionContract.fromBlock,
+        toBlock: collectionContract.toBlock,
         category: ['erc721'],
       })
 
@@ -74,10 +73,10 @@ const args = process.argv.slice(2)
       })
 
       // address to amount
-      const amountPerToken = tokenContract.amount
+      const amountPerToken = collectionContract.amount
       Object.keys(tokens).forEach((id) => {
         const address = getAddress(tokens[id])
-        if (addresses[address] && tokenContract.cumulative) {
+        if (addresses[address] && collectionContract.cumulative) {
           addresses[address] += amountPerToken
         } else {
           addresses[address] = amountPerToken
@@ -86,21 +85,21 @@ const args = process.argv.slice(2)
     }
 
     const data = {
-      category: `token-${contract}`,
+      category: `collection-owners-${key}`,
       createdAt: new Date().toISOString(),
       airdrop: addresses,
     }
 
-    logger.info(`Scrapped Token (${contract}) owners: ${Object.keys(addresses).length}`)
+    logger.info(`Scrapped collection (${key}) owners: ${Object.keys(addresses).length}`)
 
     // outputs
-    const outputPath = path.join(basePath, `token-${contract}.json`)
+    const outputPath = path.join(basePath, `collection-owners-${key}.json`)
     putJSONFile(outputPath, data)
 
     // update merkle config
     const merkleConfigPath = path.join(basePath, `config.json`)
     const merkleConfig = readJSONFile(merkleConfigPath)
-    const sources = _.uniq([...merkleConfig.sources, `./token-${contract}.json`])
+    const sources = _.uniq([...merkleConfig.sources, `./collection-owners-${key}.json`])
     putJSONFile(merkleConfigPath, { ...merkleConfig, sources })
   }
 })()

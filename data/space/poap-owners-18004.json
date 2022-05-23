@@ -1,5 +1,6 @@
 {
-  "category": "poap-18004",
+  "category": "poap-owners-18004",
+  "createdAt": "2022-05-23T05:05:42.315Z",
   "airdrop": {
     "0x6d387216e10f346F02440FD26AD7BbC9Df0b54C5": 20,
     "0xCE561d5fA83Bcf498B30ecDd7c7F8bA11241271E": 20,
@@ -885,6 +886,5 @@
     "0x67E442A6a0b4127BFFb2C6B58cB199490A7262a0": 20,
     "0x34D9Bb77c7867d0F74f75FE0086c581DC917A97e": 20,
     "0x5132726874138929b36770514994ffB7722c4e32": 20
-  },
-  "createdAt": "2022-05-23T03:56:56.562Z"
+  }
 }

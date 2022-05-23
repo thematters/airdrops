@@ -38,7 +38,7 @@ const makeQuery = (eventId: string) => `
 
   // Read config
   const configData = readJSONFile(configPath)
-  const events: { [eventId: string]: { amount: number } } = configData.POAPs
+  const events: { [eventId: string]: { amount: number } } = configData.poapOwners
   const eventIds = Object.keys(events)
 
   // Scrape from The Graph
@@ -54,7 +54,7 @@ const makeQuery = (eventId: string) => `
     })
 
     const data = {
-      category: `poap-${eventId}`,
+      category: `poap-owners-${eventId}`,
       createdAt: new Date().toISOString(),
       airdrop: addresses,
     }
@@ -62,13 +62,13 @@ const makeQuery = (eventId: string) => `
     logger.info(`Scrapped POAP (${eventId}) owners: ${Object.keys(addresses).length}`)
 
     // outputs
-    const outputPath = path.join(basePath, `poap-${eventId}.json`)
+    const outputPath = path.join(basePath, `poap-owners-${eventId}.json`)
     putJSONFile(outputPath, data)
 
     // update merkle config
     const merkleConfigPath = path.join(basePath, `config.json`)
     const merkleConfig = readJSONFile(merkleConfigPath)
-    const sources = _.uniq([...merkleConfig.sources, `./poap-${eventId}.json`])
+    const sources = _.uniq([...merkleConfig.sources, `./poap-owners-${eventId}.json`])
     putJSONFile(merkleConfigPath, { ...merkleConfig, sources })
   }
 })()

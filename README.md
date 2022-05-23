@@ -29,17 +29,27 @@ We use [POAP subgraph](https://thegraph.com/hosted-service/subgraph/poap-xyz/poa
 **Note:** Limits on 1000 addresses, needs support for pagination.
 
 ```bash
-npm run snapshot:poap -- ./data/space
+npm run snapshot:poapOwners -- ./data/space
 ```
 
-### Tokens (ERC-721, ERC-20, ERC-1155)
+### Token Owners (ERC-721, ERC-20, ERC-1155)
 
 Distribute amount of tokens to token owners.
 
-We use [Alchemy Transfers API](https://docs.alchemy.com/alchemy/enhanced-apis/transfers-api) as the source.
+#### For Owners of a Collection
+
+We use [Alchemy Transfers API](https://docs.alchemy.com/alchemy/enhanced-apis/transfers-api) and [getNFTsForCollection](https://docs.alchemy.com/alchemy/enhanced-apis/nft-api/getnftsforcollection) as the source.
 
 ```bash
-npm run snapshot:tokens -- ./data/space
+npm run snapshot:collectionOwners -- ./data/space
+```
+
+#### For Owners of a Token ID
+
+We use [getOwnersForToken](https://docs.alchemy.com/alchemy/enhanced-apis/nft-api/getownersfortoken) as the source.
+
+```bash
+npm run snapshot:tokenOwners -- ./data/space
 ```
 
 ### Transfers
