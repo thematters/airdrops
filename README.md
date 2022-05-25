@@ -16,8 +16,8 @@ Install [Foundry](https://github.com/gakonst/foundry) for contract development a
 To take snapshots from POAPs and token contracts, please config `scripts/snapshots/config.json`.
 
 ```bash
-# `./data/space` is the output directory
-npm run snapshot -- ./data/space
+# `./data/the-space-initial-airdrop` is the output directory
+npm run snapshot -- ./data/the-space-initial-airdrop
 ```
 
 ### POAP
@@ -29,7 +29,7 @@ We use [POAP subgraph](https://thegraph.com/hosted-service/subgraph/poap-xyz/poa
 **Note:** Limits on 1000 addresses, needs support for pagination.
 
 ```bash
-npm run snapshot:poapOwners -- ./data/space
+npm run snapshot:poapOwners -- ./data/the-space-initial-airdrop
 ```
 
 ### Token Owners (ERC-721, ERC-20, ERC-1155)
@@ -41,7 +41,7 @@ Distribute amount of tokens to token owners.
 We use [Alchemy Transfers API](https://docs.alchemy.com/alchemy/enhanced-apis/transfers-api) and [getNFTsForCollection](https://docs.alchemy.com/alchemy/enhanced-apis/nft-api/getnftsforcollection) as the source.
 
 ```bash
-npm run snapshot:collectionOwners -- ./data/space
+npm run snapshot:collectionOwners -- ./data/the-space-initial-airdrop
 ```
 
 #### For Owners of a Token ID
@@ -49,7 +49,7 @@ npm run snapshot:collectionOwners -- ./data/space
 We use [getOwnersForToken](https://docs.alchemy.com/alchemy/enhanced-apis/nft-api/getownersfortoken) as the source.
 
 ```bash
-npm run snapshot:tokenOwners -- ./data/space
+npm run snapshot:tokenOwners -- ./data/the-space-initial-airdrop
 ```
 
 ### Transfers
@@ -57,18 +57,18 @@ npm run snapshot:tokenOwners -- ./data/space
 Distribute amount of tokens based on transfer count.
 
 ```bash
-npm run snapshot:transfers -- ./data/space
+npm run snapshot:transfers -- ./data/the-space-initial-airdrop
 ```
 
 ## Generate Merkle Root
 
-After snapshots are taken, we can generate merkle root (outputs to `data/space/merkle.json`).
+After snapshots are taken, we can generate merkle root (outputs to `data/the-space-initial-airdrop/merkle.json`).
 
-**Note:** You can also put owner addresses (JSON file) to `data/space` folder as from different sources and update `data/space/config` manually.
+**Note:** You can also put owner addresses (JSON file) to `data/the-space-initial-airdrop` folder as from different sources and update `data/the-space-initial-airdrop/config` manually.
 
 ```bash
-# `./data/space` is the inputs (owner addresses) and outputs (proofs)
-npm run generate:merkle -- ./data/space
+# `./data/the-space-initial-airdrop` is the inputs (owner addresses) and outputs (proofs)
+npm run generate:merkle -- ./data/the-space-initial-airdrop
 ```
 
 ## Deployment

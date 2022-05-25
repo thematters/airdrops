@@ -17,4 +17,4 @@ jobs:
         run: npm install
 
       - name: Generate Merkle Root
-        run: npm run generate:merkle -- ./data/space
+        run: npm run generate:merkle -- ./data/the-space-initial-airdrop
