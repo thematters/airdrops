@@ -1,4 +1,6 @@
 import path from 'path'
+import fs from 'fs'
+import rimraf from 'rimraf'
 
 import { Generator } from './generator'
 import { sum, Airdrop } from './sum'
@@ -22,14 +24,20 @@ const args = process.argv.slice(2)
   const configData = readJSONFile(configPath)
   const decimals: number = configData.decimals ?? 18
 
+  // Remove proofs dir
+  rimraf.sync(proofsOutputPath)
+
   // Read sources
-  if (configData['sources'] === undefined) {
-    throwErrorAndExit('Missing "sources" param in config. Please add.')
+  const sourcesPath = path.join(__dirname, '../..', inputPath, 'sources')
+  const sources = fs.readdirSync(sourcesPath).filter((file) => file.includes('.json'))
+
+  if (sources.length <= 0) {
+    throwErrorAndExit('Missing sources.')
   }
 
   let airdrops: Airdrop[] = []
-  configData['sources'].forEach((src: string) => {
-    const srcPath: string = path.join(__dirname, '../..', inputPath, src)
+  sources.forEach((src: string) => {
+    const srcPath: string = path.join(sourcesPath, src)
     const srcData = readJSONFile(srcPath)
     airdrops.push(srcData)
   })

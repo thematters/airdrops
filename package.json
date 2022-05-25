@@ -21,11 +21,15 @@
     "format": "prettier --write 'contracts/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'contracts/**/*.sol' --fix",
     "prepare": "husky install",
+    "snapshot:thespace": "npm run snapshot:poapOwners -- ./data/the-space-initial-airdrop && npm run snapshot:tokenOwners -- ./data/the-space-initial-airdrop && npm run snapshot:collectionOwners -- ./data/the-space-initial-airdrop && npm run snapshot:transfers -- ./data/the-space-initial-airdrop",
     "snapshot:poapOwners": "ts-node scripts/snapshots/poapOwners.ts",
     "snapshot:tokenOwners": "ts-node scripts/snapshots/tokenOwners.ts",
     "snapshot:collectionOwners": "ts-node scripts/snapshots/collectionOwners.ts",
     "snapshot:transfers": "ts-node scripts/snapshots/transfers.ts",
-    "generate:merkle": "ts-node scripts/generate-merkle/index.ts"
+    "generate:merkle": "ts-node scripts/generate-merkle/index.ts",
+    "analytics:thespace": "npm run analytics:addresses -- ./data/the-space-initial-airdrop && npm run analytics:counts -- ./data/the-space-initial-airdrop",
+    "analytics:addresses": "ts-node scripts/analytics/addresses.ts",
+    "analytics:counts": "ts-node scripts/analytics/counts.ts"
   },
   "lint-staged": {
     "*.{ts,js,css,md,sol}": "npm run format",
@@ -36,6 +40,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.181",
     "@types/node": "^17.0.23",
+    "@types/rimraf": "^3.0.2",
     "lint-staged": "^12.3.7",
     "prettier": "^2.6.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
@@ -52,6 +57,7 @@
     "keccak256": "^1.0.6",
     "lodash": "^4.17.21",
     "merkletreejs": "^0.2.31",
+    "rimraf": "^3.0.2",
     "web3": "^1.7.3",
     "winston": "^3.6.0"
   }

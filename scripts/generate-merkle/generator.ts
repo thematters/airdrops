@@ -84,6 +84,7 @@ export class Generator {
       proofs[index].proof = proof
 
       // Save proof
+      // Note: addresses are lowercase since Vercel hosting is case-insensitive
       const addressPath = path.join(proofsOutputPath, `${recipient.address.toLowerCase()}.json`)
       putJSONFile(addressPath, { proof, index, total: recipient.amount })
     })

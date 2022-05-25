@@ -34,6 +34,7 @@ const makeQuery = (eventId: string) => `
   }
 
   const basePath = path.join(__dirname, '../..', ouputPath)
+  const sourcesPath = path.join(basePath, 'sources')
   const configPath: string = path.join(__dirname, 'config.json')
 
   // Read config
@@ -62,13 +63,7 @@ const makeQuery = (eventId: string) => `
     logger.info(`Scrapped POAP (${eventId}) owners: ${Object.keys(addresses).length}`)
 
     // outputs
-    const outputPath = path.join(basePath, `poap-owners-${eventId}.json`)
+    const outputPath = path.join(sourcesPath, `poap-owners-${eventId}.json`)
     putJSONFile(outputPath, data)
-
-    // update merkle config
-    const merkleConfigPath = path.join(basePath, `config.json`)
-    const merkleConfig = readJSONFile(merkleConfigPath)
-    const sources = _.uniq([...merkleConfig.sources, `./poap-owners-${eventId}.json`])
-    putJSONFile(merkleConfigPath, { ...merkleConfig, sources })
   }
 })()

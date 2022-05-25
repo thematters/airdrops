@@ -18,6 +18,7 @@ const args = process.argv.slice(2)
   }
 
   const basePath = path.join(__dirname, '../..', ouputPath)
+  const sourcesPath = path.join(basePath, 'sources')
   const configPath: string = path.join(__dirname, 'config.json')
 
   // Read config
@@ -85,13 +86,7 @@ const args = process.argv.slice(2)
     logger.info(`Scrapped transfer (${contract}): ${Object.keys(addresses).length}`)
 
     // outputs
-    const outputPath = path.join(basePath, `transfer-${contract}.json`)
+    const outputPath = path.join(sourcesPath, `transfer-${contract}.json`)
     putJSONFile(outputPath, data)
-
-    // update merkle config
-    const merkleConfigPath = path.join(basePath, `config.json`)
-    const merkleConfig = readJSONFile(merkleConfigPath)
-    const sources = _.uniq([...merkleConfig.sources, `./transfer-${contract}.json`])
-    putJSONFile(merkleConfigPath, { ...merkleConfig, sources })
   }
 })()
