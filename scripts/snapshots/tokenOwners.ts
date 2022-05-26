@@ -38,8 +38,8 @@ const args = process.argv.slice(2)
     // address to amount
     const addresses: { [address: string]: number } = {}
     owners.forEach((address) => {
-      const validAddress = getAddress(address)
-      addresses[validAddress] = tokenContract.amount
+      const checksumAddress = getAddress(address)
+      addresses[checksumAddress] = tokenContract.amount
     })
 
     const data = {

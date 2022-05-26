@@ -52,6 +52,8 @@ const args = process.argv.slice(2)
       }
     })
 
+    // count in range
+    const countsInRanges: { [key: string]: number } = {}
     const getAmountInRange = (count: number) => {
       const ranges = Object.keys(transferContract.amounts)
 
@@ -61,6 +63,12 @@ const args = process.argv.slice(2)
         const max = parseInt(range[1], 10) || Infinity
 
         if (count > min && count <= max) {
+          if (countsInRanges[ranges[i]]) {
+            countsInRanges[ranges[i]] += 1
+          } else {
+            countsInRanges[ranges[i]] = 1
+          }
+
           return transferContract.amounts[ranges[i]]
         }
       }
@@ -81,6 +89,7 @@ const args = process.argv.slice(2)
       createdAt: new Date().toISOString(),
       airdrop: addresses,
       transfers: addressTransfers,
+      countsInRanges,
     }
 
     logger.info(`Scrapped transfer (${contract}): ${Object.keys(addresses).length}`)

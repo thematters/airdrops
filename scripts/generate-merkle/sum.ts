@@ -1,4 +1,5 @@
 import path from 'path'
+import { getAddress, parseUnits, solidityKeccak256 } from 'ethers/lib/utils' // Ethers utils
 
 import { putJSONFile } from '../utils/file'
 
@@ -17,12 +18,13 @@ export const sum = (airdrops: Airdrop[], proofsOutputPath: string): AirdropItem 
     const addresses = Object.keys(drop.airdrop)
 
     addresses.forEach((address) => {
+      const checksumAddress = getAddress(address)
       const amount = drop.airdrop[address]
 
-      if (airdrop[address]) {
-        airdrop[address] = airdrop[address] + amount
+      if (airdrop[checksumAddress]) {
+        airdrop[checksumAddress] = airdrop[checksumAddress] + amount
       } else {
-        airdrop[address] = amount
+        airdrop[checksumAddress] = amount
       }
 
       const addressPath = path.join(proofsOutputPath, `${address.toLocaleLowerCase()}.json`)

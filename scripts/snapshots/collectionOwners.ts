@@ -49,11 +49,11 @@ const args = process.argv.slice(2)
       // address to amount
       const amountPerToken = collectionContract.amount
       owners.forEach((address) => {
-        const validAddress = getAddress(address)
-        if (addresses[validAddress] && collectionContract.cumulative) {
-          addresses[validAddress] += amountPerToken
+        const checksumAddress = getAddress(address)
+        if (addresses[checksumAddress] && collectionContract.cumulative) {
+          addresses[checksumAddress] += amountPerToken
         } else {
-          addresses[validAddress] = amountPerToken
+          addresses[checksumAddress] = amountPerToken
         }
       })
     }
