@@ -50,7 +50,7 @@ const args = process.argv.slice(2)
 
     const categoryTotal = Object.keys(categoriesTokens).reduce((acc, curr) => acc + categoriesTokens[curr], 0)
     if (categoryTotal !== total) {
-      console.log(_a)
+      console.log('categoryTotal is not same as total', _a)
       return
     }
 

@@ -2,8 +2,8 @@
   "addresses": [
     {
       "address": "0xdb9fdab72d71c998e3eebcf1096704e03c3cdae5",
-      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 3447360,
-      "total": 3447360
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 3330720,
+      "total": 3330720
     },
     {
       "address": "0x9d79786828f4ad0b042b4a6c19151e6cd311ddbe",
@@ -228,6 +228,11 @@
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 32400,
       "poap-owners-19035": 810,
       "total": 33210
+    },
+    {
+      "address": "0x096cb1b33445dfc724c33d3b9466dfe379e19cf6",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 32400,
+      "total": 32400
     },
     {
       "address": "0x1649f48c1e9a3fc380cdacaa192d203ada9545bd",
@@ -781,6 +786,11 @@
       "total": 19440
     },
     {
+      "address": "0x522547fff3347637cb0859a25892965a5c20e113",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 19440,
+      "total": 19440
+    },
+    {
       "address": "0x54e78986caf858c076efcfeadabba2a5b1025ef2",
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 19440,
       "total": 19440
@@ -807,6 +817,11 @@
       "poap-owners-19035": 810,
       "token-owners-0x2953399124f0cbb46d2cbacd8a89cf0599974963:3819291189892224204082314286982382342495564934183251953866534461082272006204": 6480,
       "transfer-0x70bf60048d634173e29ceda160c0b4300bdba973": 4860,
+      "total": 19440
+    },
+    {
+      "address": "0x86644416a0f7272e8ec59e22ec3ea28973ce383f",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 19440,
       "total": 19440
     },
     {
@@ -840,7 +855,17 @@
       "total": 19440
     },
     {
+      "address": "0xae15a8f0db29c6c7a840abc445abe3cd3b0af472",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 19440,
+      "total": 19440
+    },
+    {
       "address": "0xb61ef1d4f4a88ac660f0315a36b6f16631019bca",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 19440,
+      "total": 19440
+    },
+    {
+      "address": "0xc42154b4d516017632d55889ddf66db8799a0099",
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 19440,
       "total": 19440
     },
@@ -1585,11 +1610,6 @@
       "matters-news-users": 810,
       "poap-owners-18004": 810,
       "transfer-0x70bf60048d634173e29ceda160c0b4300bdba973": 4860,
-      "total": 12960
-    },
-    {
-      "address": "0xae15a8f0db29c6c7a840abc445abe3cd3b0af472",
-      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 12960,
       "total": 12960
     },
     {
@@ -3465,6 +3485,12 @@
       "total": 7290
     },
     {
+      "address": "0x9731c556a8f285fa33ff3dec4add14784b944036",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
+      "matters-news-users": 810,
+      "total": 7290
+    },
+    {
       "address": "0x977a1a8a17d98727d6c451fbebca79d5e941d138",
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
       "matters-news-users": 810,
@@ -4207,6 +4233,11 @@
       "total": 6480
     },
     {
+      "address": "0x18d0bcfbecb1ff0b81f414fb060d0a80d30dd4d5",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
+      "total": 6480
+    },
+    {
       "address": "0x19ceb2613aa585b98e3a5982beb5d92b34134f0c",
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
       "total": 6480
@@ -4592,6 +4623,11 @@
       "total": 6480
     },
     {
+      "address": "0x4bcb9aa76d692c8224e481035c186a1fbb68044b",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
+      "total": 6480
+    },
+    {
       "address": "0x4bced2a084ce6587452f9ab5d5f8231fbaa91240",
       "token-owners-0x2953399124f0cbb46d2cbacd8a89cf0599974963:3819291189892224204082314286982382342495564934183251953866534481972992933929": 6480,
       "total": 6480
@@ -4663,6 +4699,11 @@
     },
     {
       "address": "0x5515c1a1f342e53686a36d2bc85798d8e2c72b4c",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
+      "total": 6480
+    },
+    {
+      "address": "0x55ba3fb20c6611f1d12cb4fc516caff57eafb372",
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
       "total": 6480
     },
@@ -5057,11 +5098,6 @@
       "total": 6480
     },
     {
-      "address": "0x86644416a0f7272e8ec59e22ec3ea28973ce383f",
-      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
-      "total": 6480
-    },
-    {
       "address": "0x86bbb3655fa9423769f9decdbfb9b0fa3196a549",
       "token-owners-0x2953399124f0cbb46d2cbacd8a89cf0599974963:3819291189892224204082314286982382342495564934183251953866534473176899911715": 6480,
       "total": 6480
@@ -5379,6 +5415,11 @@
       "total": 6480
     },
     {
+      "address": "0xa9b36da931a19a7619b6bd5835a3765dccd7c298",
+      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
+      "total": 6480
+    },
+    {
       "address": "0xa9bb2546f2728478507125da6ccb827909aa7730",
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
       "total": 6480
@@ -5615,11 +5656,6 @@
     },
     {
       "address": "0xc3f47fffe9c3a828e6b837890b127e3c1020bb94",
-      "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
-      "total": 6480
-    },
-    {
-      "address": "0xc42154b4d516017632d55889ddf66db8799a0099",
       "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 6480,
       "total": 6480
     },
@@ -20876,11 +20912,6 @@
       "total": 810
     },
     {
-      "address": "0x9731c556a8f285fa33ff3dec4add14784b944036",
-      "matters-news-users": 810,
-      "total": 810
-    },
-    {
       "address": "0x9776c82c8a4e9a388829cf4bd78d3cc7b25e09f3",
       "poap-owners-18004": 810,
       "total": 810
@@ -26151,6 +26182,11 @@
       "total": 810
     },
     {
+      "address": "0xe99780d89943aa5fc6ec7883f4e107c7eb33fc46",
+      "matters-news-users": 810,
+      "total": 810
+    },
+    {
       "address": "0xe999f0ca73f28904a828f01a7eebeee76f7a9630",
       "matters-news-users": 810,
       "total": 810
@@ -26447,6 +26483,11 @@
     },
     {
       "address": "0xee15256dbc4fd9a8dfb31b94a3bc5057bc96df70",
+      "matters-news-users": 810,
+      "total": 810
+    },
+    {
+      "address": "0xee2be5e981ddca44bf24e2a1836b88f8e199a4c0",
       "matters-news-users": 810,
       "total": 810
     },

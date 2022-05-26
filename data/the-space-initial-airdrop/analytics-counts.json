@@ -1,11 +1,11 @@
 {
-  "totalAddresses": 6641,
-  "totalUniqueAddresses": 5216,
-  "totalTokenAllocated": 20002880,
+  "totalAddresses": 6650,
+  "totalUniqueAddresses": 5224,
+  "totalTokenAllocated": 20004500,
   "totalTokensByCategory": {
     "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 9720000,
     "historians": 74000,
-    "matters-news-users": 2511810,
+    "matters-news-users": 2513430,
     "moderators": 101000,
     "token-owners-0x2953399124f0cbb46d2cbacd8a89cf0599974963:3819291189892224204082314286982382342495564934183251953866534483072504561764": 228420,
     "transfer-0x70bf60048d634173e29ceda160c0b4300bdba973": 2539350,
@@ -34,9 +34,9 @@
   },
   "totalAddressesbyCategory": {
     "ambassadors": 2,
-    "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 645,
+    "collection-owners-0x8515ba8ef2cf2f2ba44b26ff20337d7a2bc5e6d8": 652,
     "historians": 4,
-    "matters-news-users": 3101,
+    "matters-news-users": 3103,
     "moderators": 5,
     "poap-owners-18004": 884,
     "poap-owners-19035": 103,
