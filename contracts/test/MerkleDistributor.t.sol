@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {DSTest} from 'ds-test/test.sol';
+import 'forge-std/Test.sol';
+import 'forge-std/Vm.sol';
+import 'forge-std/console2.sol';
+
 import '../MerkleDistributor.sol';
 import './utils/ERC20Token.sol';
-import {Hevm} from './utils/Hevm.sol';
-import {console} from './utils/Console.sol';
 
-contract MerkleDistributorTest is DSTest {
+contract MerkleDistributorTest is Test {
     ERC20Token public token;
     MerkleDistributor public distributor;
-
-    Hevm public vm = Hevm(HEVM_ADDRESS);
 
     address public constant DEPLOYER = address(175);
     uint256 public constant DEPLOYER_BALANCE = 100000e18;

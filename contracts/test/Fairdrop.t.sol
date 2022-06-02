@@ -1,30 +1,33 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {DSTest} from 'ds-test/test.sol';
+import 'forge-std/Test.sol';
+import 'forge-std/Vm.sol';
+import 'forge-std/console2.sol';
 
 import './utils/ERC20Token.sol';
-import {Hevm} from './utils/Hevm.sol';
-import {console} from './utils/Console.sol';
 
 import '../Fairdrop.sol';
 
-contract FairdropTest is DSTest {
+contract FairdropTest is Test {
+    using ECDSA for bytes32;
+
     ERC20Token public token;
     Fairdrop public fairdrop;
-
-    Hevm public vm = Hevm(HEVM_ADDRESS);
 
     uint256 public constant OWNER_PK = 174;
     uint256 public constant SIGNER_PK = 175;
     uint256 public constant DEPLOYER_PK = 176;
     uint256 public constant CLAIMER_PK = 177;
-    uint256 public constant CLAIMER_2_PK = 178;
-    address public OWNER;
-    address public SIGNER;
-    address public DEPLOYER;
-    address public CLAIMER;
-    address public CLAIMER_2;
+    uint256 public constant CLAIMER2_PK = 178;
+    address public owner;
+    address public signer;
+    address public deployer;
+    address public claimer;
+    address public claimer2;
+
+    bytes32 public constant USER_ID = keccak256('twitter:1234567890');
+    bytes32 public constant USER_ID_2 = keccak256('twitter:1234567891');
 
     uint256 public constant FAIRDROP_BALANCE = 100000e18;
     uint256 public constant AMOUNT_PER_ADDRESS = 10e18;
@@ -33,22 +36,22 @@ contract FairdropTest is DSTest {
 
     function setUp() public virtual {
         // init addresses
-        OWNER = vm.addr(OWNER_PK);
-        SIGNER = vm.addr(SIGNER_PK);
-        DEPLOYER = vm.addr(DEPLOYER_PK);
-        CLAIMER = vm.addr(CLAIMER_PK);
-        vm.label(OWNER, 'OWNER');
-        vm.label(SIGNER, 'SIGNER');
-        vm.label(DEPLOYER, 'DEPLOYER');
-        vm.label(CLAIMER, 'CLAIMER');
+        owner = vm.addr(OWNER_PK);
+        signer = vm.addr(SIGNER_PK);
+        deployer = vm.addr(DEPLOYER_PK);
+        claimer = vm.addr(CLAIMER_PK);
+        vm.label(owner, 'owner');
+        vm.label(signer, 'signer');
+        vm.label(deployer, 'deployer');
+        vm.label(claimer, 'claimer');
 
-        vm.startPrank(DEPLOYER);
+        vm.startPrank(deployer);
 
         // Deploy ERC-20 token
         token = new ERC20Token();
 
         // Deploy fairdrop contract
-        fairdrop = new Fairdrop(address(token), SIGNER, OWNER, AMOUNT_PER_ADDRESS);
+        fairdrop = new Fairdrop(address(token), signer, owner, AMOUNT_PER_ADDRESS);
 
         // Transfer some to fairdrop contract
         token.mint(address(fairdrop), FAIRDROP_BALANCE);
@@ -76,91 +79,103 @@ contract FairdropTest is DSTest {
             bytes32 s
         )
     {
-        bytes32 hash = keccak256(abi.encode(account_, userId_, expiredAt_, address(fairdrop)));
+        bytes32 hash = keccak256(abi.encode(account_, userId_, expiredAt_, address(fairdrop))).toEthSignedMessageHash();
 
         (v, r, s) = vm.sign(SIGNER_PK, hash);
-        console2.log(v, r, s);
     }
 
     function testClaim() public {
-        bytes32 userId = keccak256('twitter:1234567890');
-        (uint8 v, bytes32 r, bytes32 s) = _perimt(CLAIMER, userId, EXPIRED_AT);
+        (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
 
-        uint256 prevBalance = token.balanceOf(CLAIMER);
-        fairdrop.claim(CLAIMER, userId, EXPIRED_AT, v, r, s);
-        assertEq(token.balanceOf(CLAIMER), prevBalance + AMOUNT_PER_ADDRESS);
+        uint256 prevBalance = token.balanceOf(claimer);
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        assertEq(token.balanceOf(claimer), prevBalance + AMOUNT_PER_ADDRESS);
     }
 
     function testCannotClaimTwiceWithSameUserId() public {
         // first claim
-        bytes32 userId = keccak256('twitter:1234567890');
-        (uint8 v, bytes32 r, bytes32 s) = _perimt(CLAIMER, userId, EXPIRED_AT);
-        fairdrop.claim(CLAIMER, userId, EXPIRED_AT, v, r, s);
+
+        (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
 
         // second claim
-        // vm.expectRevert(abi.encodeWithSignature('UserIdAlreadyClaimed(bytes32)', userId));
-        // (uint8 v2, bytes32 r2, bytes32 s2) = _perimt(CLAIMER_2, userId, EXPIRED_AT);
-        // fairdrop.claim(CLAIMER_2, userId, EXPIRED_AT, v2, r2, s2);
+        vm.expectRevert(abi.encodeWithSignature('UserIdAlreadyClaimed(bytes32)', USER_ID));
+        (uint8 v2, bytes32 r2, bytes32 s2) = _perimt(claimer2, USER_ID, EXPIRED_AT);
+        fairdrop.claim(claimer2, USER_ID, EXPIRED_AT, v2, r2, s2);
     }
 
     function testCannotClaimTwiceWithSameAddress() public {
         // first claim
-        bytes32 userId = keccak256('twitter:1234567890');
-        (uint8 v, bytes32 r, bytes32 s) = _perimt(CLAIMER, userId, EXPIRED_AT);
-        fairdrop.claim(CLAIMER, userId, EXPIRED_AT, v, r, s);
+
+        (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
 
         // second claim
-        vm.expectRevert(abi.encodeWithSignature('AddressAlreadyClaimed(address)', CLAIMER));
-        fairdrop.claim(CLAIMER, userId, EXPIRED_AT, v, r, s);
+        vm.expectRevert(abi.encodeWithSignature('AddressAlreadyClaimed(address)', claimer));
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
     }
 
     function testCannotClaimWithWrongSignature() public {
-        bytes32 userId = keccak256('twitter:1234567890');
-
         // sign with wrong account
-        (uint8 v, bytes32 r, bytes32 s) = _perimt(CLAIMER_2, userId, EXPIRED_AT);
+        (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer2, USER_ID, EXPIRED_AT);
         vm.expectRevert(abi.encodeWithSignature('InvalidSignature()'));
-        fairdrop.claim(CLAIMER, userId, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
     }
 
     function testCannotClaimExpired() public {
-        bytes32 userId = keccak256('twitter:1234567890');
-        (uint8 v, bytes32 r, bytes32 s) = _perimt(CLAIMER, userId, EXPIRED_AT);
+        (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
 
         vm.expectRevert(abi.encodeWithSignature('ClaimExpired()'));
         vm.warp(EXPIRED_AT + 1);
-        fairdrop.claim(CLAIMER, userId, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
     }
 
-    function testSetAmountPerAddress() public {}
+    function testSetAmountPerAddress() public {
+        uint256 newAmountPerAddress = AMOUNT_PER_ADDRESS + 100;
 
-    function testCannotSetAmountPerAddressByNonOwner() public {}
+        // set amount per address
+        vm.prank(owner);
+        fairdrop.setAmountPerAddress(newAmountPerAddress);
+
+        // claim
+
+        (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
+
+        uint256 prevBalance = token.balanceOf(claimer);
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        assertEq(token.balanceOf(claimer), prevBalance + newAmountPerAddress);
+    }
+
+    function testCannotSetAmountPerAddressByNonOwner() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        fairdrop.setAmountPerAddress(1);
+    }
 
     /**
      * Withdraw
      */
     function testCannotSweepByNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
-        fairdrop.sweep(OWNER);
+        fairdrop.sweep(owner);
     }
 
     function testSweep() public {
         uint256 fairdropBalance = token.balanceOf(address(fairdrop));
-        uint256 ownerBalance = token.balanceOf(OWNER);
+        uint256 ownerBalance = token.balanceOf(owner);
 
-        vm.prank(OWNER);
-        fairdrop.sweep(OWNER);
+        vm.prank(owner);
+        fairdrop.sweep(owner);
 
         // airdrop balance should be 0
         assertEq(token.balanceOf(address(fairdrop)), 0);
 
         // owner balance should be increased
-        assertEq(token.balanceOf(OWNER), ownerBalance + fairdropBalance);
+        assertEq(token.balanceOf(owner), ownerBalance + fairdropBalance);
     }
 
     function testSweepToOwner() public {
         uint256 fairdropBalance = token.balanceOf(address(fairdrop));
-        uint256 ownerBalance = token.balanceOf(OWNER);
+        uint256 ownerBalance = token.balanceOf(owner);
 
         fairdrop.sweepToOwner();
 
@@ -168,13 +183,34 @@ contract FairdropTest is DSTest {
         assertEq(token.balanceOf(address(fairdrop)), 0);
 
         // deployer balance should be increased
-        assertEq(token.balanceOf(OWNER), ownerBalance + fairdropBalance);
+        assertEq(token.balanceOf(owner), ownerBalance + fairdropBalance);
     }
 
     /**
      * Verify
      */
-    function testSetSigner() public {}
+    function testSetSigner() public {
+        uint256 newSignerPk = SIGNER_PK + 1000;
+        address newSigner = vm.addr(newSignerPk);
 
-    function testCannotSetSignerByNonOwner() public {}
+        bytes32 hash = keccak256(abi.encode(claimer, USER_ID, EXPIRED_AT, address(fairdrop))).toEthSignedMessageHash();
+
+        // set new signer
+        vm.prank(owner);
+        fairdrop.setSigner(newSigner);
+
+        // claim with new signer pk
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(newSignerPk, hash);
+        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+
+        // cannot claim with old signer pk
+        (uint8 v2, bytes32 r2, bytes32 s2) = vm.sign(SIGNER_PK, hash);
+        vm.expectRevert(abi.encodeWithSignature('InvalidSignature()'));
+        fairdrop.claim(claimer2, USER_ID_2, EXPIRED_AT, v2, r2, s2);
+    }
+
+    function testCannotSetSignerByNonOwner() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        fairdrop.setSigner(claimer);
+    }
 }

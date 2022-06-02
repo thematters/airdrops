@@ -1,14 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.13;
 
-import 'openzeppelin-contracts/access/Ownable.sol';
-import 'openzeppelin-contracts/utils/cryptography/ECDSA.sol';
-import 'openzeppelin-contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 import './IFairdrop.sol';
 
 // https://github.com/Uniswap/merkle-distributor
 contract Fairdrop is IFairdrop, Ownable {
+    using ECDSA for bytes32;
+
     address public immutable token;
     address public signer;
     uint256 public amountPerAddress;
@@ -23,7 +25,7 @@ contract Fairdrop is IFairdrop, Ownable {
         uint256 amountPerAddress_
     ) {
         token = token_;
-        signer_ = signer_;
+        signer = signer_;
         amountPerAddress = amountPerAddress_;
 
         // immediately transfer ownership to a multisig
@@ -59,7 +61,8 @@ contract Fairdrop is IFairdrop, Ownable {
         }
 
         // Verify the signature
-        if (!_verify(_hash(account_, userId_, expiredAt_), v_, r_, s_)) {
+        bytes32 hash = keccak256(abi.encode(account_, userId_, expiredAt_, address(this))).toEthSignedMessageHash();
+        if (!_verify(hash, v_, r_, s_)) {
             revert InvalidSignature();
         }
 
@@ -74,6 +77,8 @@ contract Fairdrop is IFairdrop, Ownable {
         }
 
         emit Claimed(account_, userId_, amount);
+
+        return true;
     }
 
     /// @inheritdoc IFairdrop
@@ -116,17 +121,6 @@ contract Fairdrop is IFairdrop, Ownable {
     }
 
     /**
-     * @dev hash of the signed message
-     */
-    function _hash(
-        address account_,
-        bytes32 userId_,
-        uint256 expiredAt_
-    ) internal view returns (bytes32) {
-        return keccak256(abi.encode(account_, userId_, expiredAt_, address(this)));
-    }
-
-    /**
      * @dev verify if a signature is signed by signer
      */
     function _verify(
@@ -134,7 +128,7 @@ contract Fairdrop is IFairdrop, Ownable {
         uint8 v_,
         bytes32 r_,
         bytes32 s_
-    ) internal view returns (bool) {
-        return (ECDSA.recover(ECDSA.toEthSignedMessageHash(hash_), v_, r_, s_) == signer);
+    ) internal view returns (bool isSignedBySigner) {
+        isSignedBySigner = hash_.recover(v_, r_, s_) == signer;
     }
 }
