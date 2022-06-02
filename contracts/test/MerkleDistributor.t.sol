@@ -37,7 +37,7 @@ contract MerkleDistributorTest is DSTest {
         // Create merkle distributor
         distributor = new MerkleDistributor(address(token), MERKLE_ROOT, EXPIRED_AT);
 
-        // Transfer token to distributor
+        // Transfer tokens to distributor
         token.mint(address(distributor), DEPLOYER_BALANCE);
 
         vm.stopPrank();
