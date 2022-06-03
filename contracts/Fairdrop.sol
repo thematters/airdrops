@@ -42,6 +42,7 @@ contract Fairdrop is IFairdrop, Ownable {
     function claim(
         address account_,
         bytes32 userId_,
+        string memory nonce_,
         uint256 expiredAt_,
         uint8 v_,
         bytes32 r_,
@@ -61,7 +62,8 @@ contract Fairdrop is IFairdrop, Ownable {
         }
 
         // Verify the signature
-        bytes32 hash = keccak256(abi.encode(account_, userId_, expiredAt_, address(this))).toEthSignedMessageHash();
+        bytes32 hash = keccak256(abi.encode(account_, userId_, nonce_, expiredAt_, address(this)))
+            .toEthSignedMessageHash();
         if (!_verify(hash, v_, r_, s_)) {
             revert InvalidSignature();
         }

@@ -33,6 +33,7 @@ contract FairdropTest is Test {
     uint256 public constant AMOUNT_PER_ADDRESS = 10e18;
 
     uint256 public constant EXPIRED_AT = 1648720000;
+    string public constant NONCE = '74b0b972408bb0b4858a6b2b';
 
     function setUp() public virtual {
         // init addresses
@@ -79,7 +80,8 @@ contract FairdropTest is Test {
             bytes32 s
         )
     {
-        bytes32 hash = keccak256(abi.encode(account_, userId_, expiredAt_, address(fairdrop))).toEthSignedMessageHash();
+        bytes32 hash = keccak256(abi.encode(account_, userId_, NONCE, expiredAt_, address(fairdrop)))
+            .toEthSignedMessageHash();
 
         (v, r, s) = vm.sign(SIGNER_PK, hash);
     }
@@ -88,7 +90,7 @@ contract FairdropTest is Test {
         (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
 
         uint256 prevBalance = token.balanceOf(claimer);
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
         assertEq(token.balanceOf(claimer), prevBalance + AMOUNT_PER_ADDRESS);
     }
 
@@ -96,30 +98,30 @@ contract FairdropTest is Test {
         // first claim
 
         (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
 
         // second claim
         vm.expectRevert(abi.encodeWithSignature('UserIdAlreadyClaimed(bytes32)', USER_ID));
         (uint8 v2, bytes32 r2, bytes32 s2) = _perimt(claimer2, USER_ID, EXPIRED_AT);
-        fairdrop.claim(claimer2, USER_ID, EXPIRED_AT, v2, r2, s2);
+        fairdrop.claim(claimer2, USER_ID, NONCE, EXPIRED_AT, v2, r2, s2);
     }
 
     function testCannotClaimTwiceWithSameAddress() public {
         // first claim
 
         (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
 
         // second claim
         vm.expectRevert(abi.encodeWithSignature('AddressAlreadyClaimed(address)', claimer));
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
     }
 
     function testCannotClaimWithWrongSignature() public {
         // sign with wrong account
         (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer2, USER_ID, EXPIRED_AT);
         vm.expectRevert(abi.encodeWithSignature('InvalidSignature()'));
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
     }
 
     function testCannotClaimExpired() public {
@@ -127,7 +129,7 @@ contract FairdropTest is Test {
 
         vm.expectRevert(abi.encodeWithSignature('ClaimExpired()'));
         vm.warp(EXPIRED_AT + 1);
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
     }
 
     function testSetAmountPerAddress() public {
@@ -142,7 +144,7 @@ contract FairdropTest is Test {
         (uint8 v, bytes32 r, bytes32 s) = _perimt(claimer, USER_ID, EXPIRED_AT);
 
         uint256 prevBalance = token.balanceOf(claimer);
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
         assertEq(token.balanceOf(claimer), prevBalance + newAmountPerAddress);
     }
 
@@ -193,7 +195,8 @@ contract FairdropTest is Test {
         uint256 newSignerPk = SIGNER_PK + 1000;
         address newSigner = vm.addr(newSignerPk);
 
-        bytes32 hash = keccak256(abi.encode(claimer, USER_ID, EXPIRED_AT, address(fairdrop))).toEthSignedMessageHash();
+        bytes32 hash = keccak256(abi.encode(claimer, USER_ID, NONCE, EXPIRED_AT, address(fairdrop)))
+            .toEthSignedMessageHash();
 
         // set new signer
         vm.prank(owner);
@@ -201,12 +204,12 @@ contract FairdropTest is Test {
 
         // claim with new signer pk
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(newSignerPk, hash);
-        fairdrop.claim(claimer, USER_ID, EXPIRED_AT, v, r, s);
+        fairdrop.claim(claimer, USER_ID, NONCE, EXPIRED_AT, v, r, s);
 
         // cannot claim with old signer pk
         (uint8 v2, bytes32 r2, bytes32 s2) = vm.sign(SIGNER_PK, hash);
         vm.expectRevert(abi.encodeWithSignature('InvalidSignature()'));
-        fairdrop.claim(claimer2, USER_ID_2, EXPIRED_AT, v2, r2, s2);
+        fairdrop.claim(claimer2, USER_ID_2, NONCE, EXPIRED_AT, v2, r2, s2);
     }
 
     function testCannotSetSignerByNonOwner() public {

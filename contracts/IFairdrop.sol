@@ -81,6 +81,7 @@ interface IFairdrop {
      *
      * @param account_ Address that claims the drop.
      * @param userId_ Hashed User ID that claims the drop.
+     * @param nonce_ Unique ID to claim the drop.
      * @param expiredAt_ Timestamp when the drop expires.
      * @param v_ Signature field.
      * @param r_ Signature field.
@@ -90,6 +91,7 @@ interface IFairdrop {
     function claim(
         address account_,
         bytes32 userId_,
+        string memory nonce_,
         uint256 expiredAt_,
         uint8 v_,
         bytes32 r_,
