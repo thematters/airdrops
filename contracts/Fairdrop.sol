@@ -62,7 +62,7 @@ contract Fairdrop is IFairdrop, Ownable {
         }
 
         // Verify the signature
-        bytes32 hash = keccak256(abi.encode(account_, userId_, nonce_, expiredAt_, address(this)))
+        bytes32 hash = keccak256(abi.encodePacked(account_, userId_, nonce_, expiredAt_, address(this)))
             .toEthSignedMessageHash();
         if (!_verify(hash, v_, r_, s_)) {
             revert InvalidSignature();

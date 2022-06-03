@@ -80,7 +80,7 @@ contract FairdropTest is Test {
             bytes32 s
         )
     {
-        bytes32 hash = keccak256(abi.encode(account_, userId_, NONCE, expiredAt_, address(fairdrop)))
+        bytes32 hash = keccak256(abi.encodePacked(account_, userId_, NONCE, expiredAt_, address(fairdrop)))
             .toEthSignedMessageHash();
 
         (v, r, s) = vm.sign(SIGNER_PK, hash);
@@ -195,7 +195,7 @@ contract FairdropTest is Test {
         uint256 newSignerPk = SIGNER_PK + 1000;
         address newSigner = vm.addr(newSignerPk);
 
-        bytes32 hash = keccak256(abi.encode(claimer, USER_ID, NONCE, EXPIRED_AT, address(fairdrop)))
+        bytes32 hash = keccak256(abi.encodePacked(claimer, USER_ID, NONCE, EXPIRED_AT, address(fairdrop)))
             .toEthSignedMessageHash();
 
         // set new signer
