@@ -4,8 +4,8 @@ src = 'contracts'
 out = 'out'
 libs = ['lib']
 remappings = [
-    'ds-test/=lib/ds-test/src/',
-    'openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/'
+  "@openzeppelin/=lib/openzeppelin-contracts/",
+  "forge-std/=lib/forge-std/src/"
 ]
 fuzz_runs = 256
 verbosity = 3
