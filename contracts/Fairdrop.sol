@@ -147,6 +147,7 @@ contract Fairdrop is IFairdrop, Ownable {
         bytes32 r_,
         bytes32 s_
     ) internal view returns (bool isSignedBySigner) {
-        isSignedBySigner = hash_.recover(v_, r_, s_) == signer;
+        address recoveredAddress = hash_.recover(v_, r_, s_);
+        isSignedBySigner = recoveredAddress != address(0) && recoveredAddress == signer;
     }
 }
