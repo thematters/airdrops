@@ -98,7 +98,9 @@ contract Fairdrop is IFairdrop, Ownable {
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));
 
-        tokenContract.transfer(target_, balance);
+        if (!tokenContract.transfer(target_, balance)) {
+            revert TransferFailed(target_, balance);
+        }
         emit Swept(target_, balance);
     }
 
@@ -108,7 +110,9 @@ contract Fairdrop is IFairdrop, Ownable {
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));
 
-        tokenContract.transfer(target, balance);
+        if (!tokenContract.transfer(target, balance)) {
+            revert TransferFailed(target, balance);
+        }
         emit Swept(target, balance);
     }
 
