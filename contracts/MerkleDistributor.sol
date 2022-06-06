@@ -29,6 +29,8 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         bytes32 merkleRoot_,
         uint256 expireTimestamp_
     ) {
+        require(token_ != address(0), 'zero address');
+
         token = token_;
         merkleRoot = merkleRoot_;
         expireTimestamp = expireTimestamp_;
@@ -49,15 +51,16 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         hasClaimed[account] = true;
 
         // Transfer token
-        require(IERC20(token).transfer(account, amount), 'MerkleDistributor: Failed token transfer');
-
         emit Claimed(account, amount);
+
+        require(IERC20(token).transfer(account, amount), 'MerkleDistributor: Failed token transfer');
     }
 
     /**
      * @dev Sweep any unclaimed funds to arbitrary destination. Can only be called by owner.
      */
     function sweep(address target) external onlyOwner {
+        // slither-disable-next-line timestamp
         require(block.timestamp >= expireTimestamp, 'MerkleDistributor: Drop not expired');
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));
@@ -70,6 +73,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
      * @dev Sweep any unclaimed funds to contract owner. Can be called by anyone.
      */
     function sweepToOwner() external {
+        // slither-disable-next-line timestamp
         require(block.timestamp >= expireTimestamp, 'MerkleDistributor: Drop not expired');
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));

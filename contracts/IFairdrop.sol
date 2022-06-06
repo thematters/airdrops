@@ -19,6 +19,11 @@ interface IFairdrop {
     error AddressAlreadyClaimed(address account);
 
     /**
+     * @dev Requires non-zero address.
+     */
+    error ZeroAddress();
+
+    /**
      * @dev Address has already claimed the fairdrop.
      */
     error UserIdAlreadyClaimed(bytes32 userId);
