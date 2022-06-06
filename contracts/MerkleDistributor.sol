@@ -61,7 +61,9 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         require(block.timestamp >= expireTimestamp, 'MerkleDistributor: Drop not expired');
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));
-        tokenContract.transfer(target, balance);
+
+        bool success = tokenContract.transfer(target, balance);
+        require(success, 'MerkleDistributor: Failed token transfer');
     }
 
     /**
@@ -71,6 +73,8 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         require(block.timestamp >= expireTimestamp, 'MerkleDistributor: Drop not expired');
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));
-        tokenContract.transfer(owner(), balance);
+
+        bool success = tokenContract.transfer(owner(), balance);
+        require(success, 'MerkleDistributor: Failed token transfer');
     }
 }
