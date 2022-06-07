@@ -24,6 +24,10 @@ contract Fairdrop is IFairdrop, Ownable {
         address owner_,
         uint256 amountPerAddress_
     ) {
+        if (token_ == address(0) || signer_ == address(0) || owner_ == address(0)) {
+            revert ZeroAddress();
+        }
+
         token = token_;
         signer = signer_;
         amountPerAddress = amountPerAddress_;
@@ -49,6 +53,7 @@ contract Fairdrop is IFairdrop, Ownable {
         bytes32 s_
     ) external returns (bool success) {
         // Check if the claim is expired
+        // slither-disable-next-line timestamp
         if (expiredAt_ < block.timestamp) {
             revert ClaimExpired();
         }
@@ -74,11 +79,12 @@ contract Fairdrop is IFairdrop, Ownable {
 
         // Transfer tokens
         uint256 amount = amountPerAddress;
+
+        emit Claimed(account_, userId_, amount);
+
         if (!IERC20(token).transfer(account_, amount)) {
             revert TransferFailed(account_, amount);
         }
-
-        emit Claimed(account_, userId_, amount);
 
         return true;
     }
@@ -98,8 +104,11 @@ contract Fairdrop is IFairdrop, Ownable {
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));
 
-        tokenContract.transfer(target_, balance);
         emit Swept(target_, balance);
+
+        if (!tokenContract.transfer(target_, balance)) {
+            revert TransferFailed(target_, balance);
+        }
     }
 
     /// @inheritdoc IFairdrop
@@ -108,8 +117,11 @@ contract Fairdrop is IFairdrop, Ownable {
         IERC20 tokenContract = IERC20(token);
         uint256 balance = tokenContract.balanceOf(address(this));
 
-        tokenContract.transfer(target, balance);
         emit Swept(target, balance);
+
+        if (!tokenContract.transfer(target, balance)) {
+            revert TransferFailed(target, balance);
+        }
     }
 
     //////////////////////////////
@@ -118,6 +130,10 @@ contract Fairdrop is IFairdrop, Ownable {
 
     /// @inheritdoc IFairdrop
     function setSigner(address signer_) external onlyOwner {
+        if (signer_ == address(0)) {
+            revert ZeroAddress();
+        }
+
         signer = signer_;
         emit SignerChanged(signer_);
     }
@@ -131,6 +147,7 @@ contract Fairdrop is IFairdrop, Ownable {
         bytes32 r_,
         bytes32 s_
     ) internal view returns (bool isSignedBySigner) {
-        isSignedBySigner = hash_.recover(v_, r_, s_) == signer;
+        address recoveredAddress = hash_.recover(v_, r_, s_);
+        isSignedBySigner = recoveredAddress != address(0) && recoveredAddress == signer;
     }
 }

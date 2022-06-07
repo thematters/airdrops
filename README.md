@@ -88,3 +88,15 @@ cp .env.polygon-mumbai.example .env.polygon-mumbai
 
 make test NETWORK=polygon-mumbai
 ```
+
+## Static Analysis
+
+https://book.getfoundry.sh/config/static-analyzers.html#static-analyzers
+
+```bash
+pip3 install slither-analyzer
+pip3 install solc-select
+solc-select install 0.8.13
+solc-select use 0.8.13
+slither contracts/Airdrop.sol
+```
