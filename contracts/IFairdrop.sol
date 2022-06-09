@@ -121,12 +121,6 @@ interface IFairdrop {
      */
     function sweep(address target_) external;
 
-    /**
-     * @notice Sweep any unclaimed funds to owner address
-     * @dev Transfers the full tokenbalance from the contract to owner of contract.
-     */
-    function sweepToOwner() external;
-
     //////////////////////////////
     /// Verify
     //////////////////////////////

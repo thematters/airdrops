@@ -111,19 +111,6 @@ contract Fairdrop is IFairdrop, Ownable {
         }
     }
 
-    /// @inheritdoc IFairdrop
-    function sweepToOwner() external {
-        address target = owner();
-        IERC20 tokenContract = IERC20(token);
-        uint256 balance = tokenContract.balanceOf(address(this));
-
-        emit Swept(target, balance);
-
-        if (!tokenContract.transfer(target, balance)) {
-            revert TransferFailed(target, balance);
-        }
-    }
-
     //////////////////////////////
     /// Verify
     //////////////////////////////
