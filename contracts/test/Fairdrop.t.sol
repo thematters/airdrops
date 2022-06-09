@@ -175,19 +175,6 @@ contract FairdropTest is Test {
         assertEq(token.balanceOf(owner), ownerBalance + fairdropBalance);
     }
 
-    function testSweepToOwner() public {
-        uint256 fairdropBalance = token.balanceOf(address(fairdrop));
-        uint256 ownerBalance = token.balanceOf(owner);
-
-        fairdrop.sweepToOwner();
-
-        // fairdrop balance should be 0
-        assertEq(token.balanceOf(address(fairdrop)), 0);
-
-        // deployer balance should be increased
-        assertEq(token.balanceOf(owner), ownerBalance + fairdropBalance);
-    }
-
     /**
      * Verify
      */
